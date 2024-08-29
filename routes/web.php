@@ -3,7 +3,11 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EggProductionController;
-use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ReportController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +22,7 @@ use App\Http\Controllers\InventarioController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -37,8 +41,23 @@ Route::get('eggProduction/create', [EggProductionController::class, 'create'])->
 Route::post('eggProduction', [EggProductionController::class, 'store'])->name('eggProduction.store');
 
 // Ruta para mostrar el inventario de producción de huevos
-Route::get('eggProduction/inventario', [InventarioController::class, 'view'])->name('inventario.view');
+Route::get('/inventories/view', [InventoryController::class, 'view'])->name('inventories.view');
+Route::post('/produccion/agregar', [InventoryController::class, 'addProduction'])->name('eggProduction.store');
+Route::post('/ventas/agregar', [InventoryController::class, 'addSale'])->name('sales.store');
 
+// Rutas ingresos por ventas
+Route::get('/sales/revenue', [SaleController::class, 'showRevenueForm'])->name('sales.revenue.form');
+Route::post('/sales/revenue', [SaleController::class, 'calculateRevenue'])->name('sales.revenue.calculate');
+
+
+// Ruta para ver reporte utilidad
+Route::get('/report/net-profit', [ReportController::class, 'netProfit'])->name('report.netProfit');
+
+// Ruta para Ventas
+Route::resource('sales', SaleController::class);
+
+// Ruta para registro de gastos
+Route::resource('expenses', ExpenseController::class);
 
 
 

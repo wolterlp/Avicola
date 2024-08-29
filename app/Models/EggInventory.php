@@ -5,20 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class inventario extends Model
+class EggInventory extends Model
 {
     use HasFactory;
 
+    protected $table = 'egg_inventory';
+
     protected $fillable = [
-        'date', 
-        'quantity', 
-        'user_id', 
         'egg_category_id',
+        'quantity',
+        'transaction_type',
+        'related_id',
+        'user_id',
+        'transaction_date',
     ];
 
-    // Relación con EggCategory
     public function eggCategory()
     {
         return $this->belongsTo(EggCategory::class, 'egg_category_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -1,3 +1,73 @@
+/* Estilo para el contorno del formulario */
+.form-container {
+    @apply border-2 border-pink-500 p-4 rounded-lg ;
+}
+
+/* Estilo para los campos de entrada del formulario */
+.form-input {
+    @apply mt-1 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500;
+}
+
+/* Estilo para los botones del formulario */
+.form-button {
+    @apply px-4 py-2 bg-pink-600 text-white font-semibold rounded-lg shadow-md hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2;
+}
+
+/* Estilo general para el formulario */
+.form-wrapper {
+    @apply space-y-4 p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700;
+}
+
+.financial-summary {
+    margin-top: 1rem; /* Espaciado superior */
+    padding: 1rem; /* Espaciado interno */
+    border: 1px solid #e2e8f0; /* Borde ligero */
+    border-radius: 0.375rem; /* Esquinas redondeadas */
+    background-color: #f9fafb; /* Fondo gris claro */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+    .financial-table {
+        margin-top: 1rem; /* Espaciado superior */
+        width: 100%; /* Ancho completo */
+        border-collapse: collapse; /* Colapsa los bordes */
+    }
+
+    .financial-table th, .financial-table td {
+        border: 1px solid #e2e8f0; /* Borde ligero */
+        padding: 0.75rem; /* Espaciado interno */
+        text-align: left; /* Alineación del texto */
+    }
+
+    .financial-table th {
+        background-color: #f3f4f6; /* Fondo de encabezado */
+        color: #1f2937; /* Color del texto */
+        font-weight: 600; /* Peso de la fuente */
+    }
+
+    .financial-table td {
+        background-color: #ffffff; /* Fondo blanco */
+        color: #191a1b; /* Color del texto */
+    }
+
+    .financial-table td.textCenter {
+        text-align: center; /* Centrar el texto */
+    }
+    
+    .financial-table .total-row td {
+        font-weight: 700; /* Peso de la fuente para la fila total */
+        background-color: #f9fafb; /* Fondo gris claro */
+    }
+
+    .financial-table th.descrip {
+        color: #ec4899; /* Color rosa para el texto */
+        font-weight: bold; /* Negrilla */
+    }
+
+    .white-text {
+        color: white;
+    }
+    
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -7,6 +7,7 @@ use App\Models\EggCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; // Asegúrate de importar DB 
+use App\Models\EggInventory;
 
 
 class EggProductionController extends Controller
@@ -49,7 +50,14 @@ class EggProductionController extends Controller
             'egg_category_id' => $request->input('egg_category_id'),
         ]);
 
-
+        EggInventory::create([
+            'egg_category_id' => $request->input('egg_category_id'),
+            'quantity' => $request->input('quantity'),
+            'transaction_type' => 'production', //production o sale
+            'related_id' => $production->id,
+            'user_id' => auth()->id(),
+            'transaction_date' => $request->input('date'),
+        ]);
 
         return redirect()->route('eggProduction.create')->with('success', 'Producción de huevos registrada correctamente.');
     }
