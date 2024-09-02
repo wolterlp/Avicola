@@ -34,6 +34,11 @@ class ReportController extends Controller
             $startDate = Carbon::parse($validated['start_date'])->startOfDay();
             $endDate = Carbon::parse($validated['end_date'])->endOfDay();
         }
+
+        // Fechas
+        $fec_inicio = $startDate ->format('d-m-Y');
+        $fec_fin = $endDate ->format('d-m-Y');
+
         // Calcular los ingresos totales
         $totalRevenue = Sale::whereBetween('created_at', [$startDate, $endDate])
                             ->sum('total_price');
@@ -46,7 +51,7 @@ class ReportController extends Controller
         $netProfit = $totalRevenue - $totalExpenses;
 
         // Devolver una vista con los resultados
-       return view('reports.net_profit', compact('totalRevenue', 'totalExpenses', 'netProfit'));
+       return view('reports.net_profit', compact('totalRevenue', 'totalExpenses', 'netProfit', 'fec_inicio', 'fec_fin'));
         
       // return "Hola netProfit";
     }

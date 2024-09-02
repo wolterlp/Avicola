@@ -79,6 +79,25 @@ class SaleController extends Controller
         return view('sales.show', compact('sale'));
 
     }
+/*
+    public function show($id)
+    {
+        $sale = Sale::with('eggCategory', 'user')->findOrFail($id);
+        return view('sales.modal-show', compact('sale'));
+
+    }
+*/
+
+    public function modalContentShow()
+    {
+
+        /**
+         * Muestra el contenido del modal.
+         *
+         * @return \Illuminate\View\View
+         */
+        return view('modal-show');
+    }
 
     // Método para mostrar el formulario de ingresos
     public function showRevenueForm()

@@ -22,7 +22,7 @@
                     </g>
                 </svg>
             </div>
-            <h1 class="text-pink-600 text-4xl font-semibold">Bienvenido a Avícola</h1>
+            <h1 class="text-pink-600 text-4xl font-semibold">{{ __("Bienvenido a Avícola") }}</h1>
         </div>
         
         <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -35,12 +35,12 @@
             @if (Route::has('login'))
                 <div class="mt-8">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="btn bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700 font-semibold">Comenzar</a>
+                        <a href="{{ url('sales/create') }}" class="btn bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700 font-semibold">{{ __("Comenzar") }}</a>
                     @else
-                        <a href="{{ route('login') }}" class="btn text-pink-600 hover:text-pink-800 font-semibold">Log in</a>
+                        <a href="{{ route('login') }}" class="btn text-pink-600 hover:text-pink-800 font-semibold">{{ __("Log in") }}</a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 btn text-pink-600 hover:text-pink-800 font-semibold">Register</a>
+                            <a href="{{ route('register') }}" class="ml-4 btn text-pink-600 hover:text-pink-800 font-semibold">{{ __("Register") }}</a>
                         @endif
                     @endauth
                 </div>
@@ -50,7 +50,7 @@
     
     <!-- Footer Section -->
     <footer class="mt-12 text-center text-gray-600">
-        <p>&copy; {{ date('Y') }} Avícola. All rights reserved.</p>
+        <p>&copy; {{ date('Y') }} {{ __("Avícola. All rights reserved.") }}</p>
     </footer>
 </body>
 </html>

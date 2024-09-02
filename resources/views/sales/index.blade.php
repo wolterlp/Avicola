@@ -16,13 +16,11 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex justify-center items-center">
                     <div class="form-container">
-                        
                         <div class="flex justify-center">
                             <a href="{{ route('sales.create') }}" class="btn btn-primary mb-3 form-button">
                                 {{ __('Registrar Nueva Venta') }}
                             </a>
                         </div>
-
                         <div class="financial-summary">
                             <table class="financial-table">
                                 <thead>
@@ -41,12 +39,15 @@
                                         <tr>
                                             <td class="textCenter">{{ $sale->eggCategory->category }}</td>
                                             <td class="textCenter">{{ $sale->quantity }}</td>
-                                            <td class="textCenter">{{ $sale->price_per_unit }}</td>
-                                            <td class="textCenter">{{ $sale->total_price }}</td>
+                                            <td class="textCenter">$ {{ number_format($sale->price_per_unit, 2, ',', '.') }} </td>
+                                            <td class="textCenter">$ {{ number_format($sale->total_price, 2, ',', '.') }}</td>
                                             <td class="textCenter">{{ $sale->user->name }}</td>
                                             <td>{{ $sale->created_at->format('d/m/Y') }}</td>
                                             <td>
-                                                <a href="{{ route('sales.show', $sale->id) }}" class="btn btn-primary">Ver Detalles</a>
+                                                <div>
+                                                    <!-- Include the modal content -->
+                                                    @include('sales/modal-show')
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

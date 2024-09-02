@@ -7,6 +7,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\VentasController;
 
 
 /*
@@ -61,9 +62,32 @@ Route::resource('expenses', ExpenseController::class);
 
 
 
-Route::get('/test', function () {
-    return 'Ruta de prueba funcionando';
+/* Modales  Ruta para Ventas  */
+
+Route::get('/modal-content', function () {
+    return view('modal-content');
 });
 
+
+// Ruta para modal Sales 
+Route::get('/sales/modal-show', function () {
+    return view('/sales/modal-show');
+});
+
+
+// Ruta para Ventas 
+Route::resource('ventas', VentasController::class);
+
+
+// Ruta para la vista principal de ventas
+Route::get('/ventas', [VentasController::class, 'index'])->name('ventas.index');
+
+// Ruta para cargar el contenido del modal
+Route::get('/modal-content', [VentasController::class, 'modalContent'])->name('ventas.modalContent');
+
+//menu 2
+Route::get('/menu2', function () {
+    return view('menu2');
+})->name('menu2');
 
 require __DIR__.'/auth.php';

@@ -38,6 +38,9 @@
                             <table class="financial-table">
                                 <thead>
                                     <tr>
+                                        <th colspan="2">Reporte Del {{ __($fec_fin) }} Al {{ __($fec_fin) }} </th>
+                                    </tr>
+                                    <tr>
                                         <th class="descrip">{{ __('Descripción') }}</th>
                                         <th class="descrip">{{ __('Monto') }}</th>
                                     </tr>
@@ -45,24 +48,109 @@
                                 <tbody>
                                     <tr>
                                         <td>{{ __('Ingresos Totales') }}</td>
-                                        <td>${{ number_format($totalRevenue, 2) }}</td>
+                                        <td>$ {{ number_format($totalRevenue, 2, ',', '.') }}</td>
                                     </tr>
                                     <tr>
                                         <td>{{ __('Gastos Totales') }}</td>
-                                        <td>${{ number_format($totalExpenses, 2) }}</td>
+                                        <td>$ {{ number_format($totalExpenses, 2, ',', '.') }}</td>
                                     </tr>
                                     <tr class="total-row">
                                         <td>{{ __('Utilidad Neta') }}</td>
-                                        <td>${{ number_format($netProfit, 2) }}</td>
+                                        <td>$ {{ number_format($netProfit, 2, ',', '.') }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         @endif
                     </div>
-                </div>
+
+                    <!-- resources/views/reports/net_profit.blade.php -->
+                    <div  class="form-container" style="margin: 5px auto;">
+                        <h2 class="font-semibold text-xl text-pink-600 dark:text-pink-500 leading-tight text-align:center">{{ __('Informe Financiero') }}</h2>
+
+                        <select id="chartTypeSelector">
+                            <option value="bar">{{ __('Bar') }}</option>
+                            <option value="pie">{{ __('Pie') }}</option>
+                            <option value="line">{{ __('Line') }}</option>
+                            <option value="radar">{{ __('Radar') }}</option>
+                            <option value="polarArea">{{ __('Polar Area') }}</option>
+                            <option value="scatter">{{ __('Scatter') }}</option>
+                            <option value="doughnut">{{ __('Doughnut') }}</option>
+                        </select>
+
+                        <div>
+                            <canvas id="dynamicChart" width="500" height="500"></canvas>
+                        </div>
+
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                        <script>
+                            var ctx3 = document.getElementById('dynamicChart').getContext('2d');
+
+                            // Datos del gráfico
+                            var chartData = {
+                                labels: ['Ingresos', 'Gastos', 'Utilidad Neta'],
+                                datasets: [{
+                                    label: 'Monto en $',
+                                    data: [{{ $totalRevenue }}, {{ $totalExpenses }}, {{ $netProfit }}],
+                                    backgroundColor: ['#4caf50', '#f44336', '#2196f3'],
+                                    borderColor: ['#388e3c', '#d32f2f', '#1976d2'],
+                                    borderWidth: 1
+                                }]
+                            };
+
+                            // Opciones del gráfico
+                            var chartOptions = {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            };
+
+                            // Crear el gráfico inicialmente como un gráfico de barras
+                            var dynamicChart = new Chart(ctx3, {
+                                type: 'bar', // Tipo de gráfico por defecto
+                                data: chartData,
+                                options: chartOptions
+                            });
+
+                            // Función para actualizar el gráfico
+                            function updateChartType(newType) {
+                                dynamicChart.destroy(); // Destruir el gráfico anterior
+                                dynamicChart = new Chart(ctx3, {
+                                    type: newType, // Nuevo tipo de gráfico seleccionado
+                                    data: chartData,
+                                    options: chartOptions
+                                });
+                            }
+
+                            // Escuchar el cambio en el select
+                            document.getElementById('chartTypeSelector').addEventListener('change', function() {
+                                var selectedType = this.value;
+                                updateChartType(selectedType); // Actualizar el gráfico con el nuevo tipo
+                            });
+
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <button id="generatePDF">Generar PDF</button>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script>
+            document.getElementById('generatePDF').addEventListener('click', () => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Añadir contenido al PDF
+                doc.text('Hola Mundo!', 10, 10);
+                doc.text('Este es un reporte en PDF generado con jsPDF.', 10, 20);
+
+                // Guardar el archivo PDF
+                doc.save('reporte.pdf');
+            });
+        </script>
     </div>
 </x-app-layout>

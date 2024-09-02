@@ -13,10 +13,6 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <!-- resources/views/layouts/navbar.blade.php -->
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-
                     <!-- resources/views/layouts/navigation.blade.php -->
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
                         {{ __('Inicio') }}
@@ -32,6 +28,15 @@
 
                     <x-nav-link :href="route('sales.index')" :active="request()->routeIs('sales.index')">
                         {{ __('Sales') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('sales.index')" :active="request()->routeIs('sales.index')" class="relative">
+                        {{ __('Prueba Sales') }}
+                        <!-- Submenú -->
+                        <div class="absolute hidden bg-white text-black mt-2 py-2 w-48 rounded shadow-lg group-hover:block">
+                            <a href="{{ route('expenses.index') }}" class="block px-4 py-2 hover:bg-gray-200">{{ __('Orders') }}</a>
+                            <a href="{{ route('expenses.index') }}" class="block px-4 py-2 hover:bg-gray-200">{{ __('Invoices') }}</a>
+                        </div>
                     </x-nav-link>
 
                     <x-nav-link :href="route('expenses.index')" :active="request()->routeIs('expenses.index')">
