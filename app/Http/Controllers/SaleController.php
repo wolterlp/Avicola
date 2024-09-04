@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\DB;
 class SaleController extends Controller
 {
     //
-    public function index()
+    public function historialVentas()
     {
         $sales = Sale::with('eggCategory', 'user')
-             ->orderBy('created_at', 'desc')
-             ->get();
-             
-        return view('sales.index', compact('sales'));
+        ->orderBy('created_at', 'desc')
+        ->get();
+       
+        return view('sales.history', compact('sales'));
     }
 
     public function create()
@@ -30,7 +30,6 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        
         $request->validate([
             'egg_category_id' => 'required|exists:egg_categories,id',
             'quantity' => 'required|integer|min:1',
@@ -79,18 +78,9 @@ class SaleController extends Controller
         return view('sales.show', compact('sale'));
 
     }
-/*
-    public function show($id)
-    {
-        $sale = Sale::with('eggCategory', 'user')->findOrFail($id);
-        return view('sales.modal-show', compact('sale'));
-
-    }
-*/
 
     public function modalContentShow()
     {
-
         /**
          * Muestra el contenido del modal.
          *
@@ -131,6 +121,7 @@ class SaleController extends Controller
 
         dd($sql);                    
         */
+        
         return view('sales.revenue', [
             
             'startDate' => $validated['start_date'],

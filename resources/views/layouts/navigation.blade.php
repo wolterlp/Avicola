@@ -12,39 +12,33 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <!-- resources/views/layouts/navbar.blade.php -->
                     <!-- resources/views/layouts/navigation.blade.php -->
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                        {{ __('Inicio') }}
+                        {{ __('Home') }}
                     </x-nav-link>
 
                     <x-nav-link :href="route('eggProduction.create')" :active="request()->routeIs('create')">
                         {{ __('Egg Production') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('sales.create')" :active="request()->routeIs('sales.create')">
+                        {{ __('Sales') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('sales.history')" :active="request()->routeIs('sales.history')">
+                        {{ __('Sales History') }}
+                    </x-nav-link>
+
                     <x-nav-link :href="route('inventories.view')" :active="request()->routeIs('view')">
                         {{ __('Inventories') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('sales.index')" :active="request()->routeIs('sales.index')">
-                        {{ __('Sales') }}
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('sales.index')" :active="request()->routeIs('sales.index')" class="relative">
-                        {{ __('Prueba Sales') }}
-                        <!-- Submenú -->
-                        <div class="absolute hidden bg-white text-black mt-2 py-2 w-48 rounded shadow-lg group-hover:block">
-                            <a href="{{ route('expenses.index') }}" class="block px-4 py-2 hover:bg-gray-200">{{ __('Orders') }}</a>
-                            <a href="{{ route('expenses.index') }}" class="block px-4 py-2 hover:bg-gray-200">{{ __('Invoices') }}</a>
-                        </div>
+                    <x-nav-link :href="route('sales.revenue.form')" :active="request()->routeIs('sales.revenue')">
+                        {{ __('Revenue') }}
                     </x-nav-link>
 
                     <x-nav-link :href="route('expenses.index')" :active="request()->routeIs('expenses.index')">
                         {{ __('Expenses') }}
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('sales.revenue.form')" :active="request()->routeIs('sales.revenue')">
-                        {{ __('Revenue') }}
                     </x-nav-link>
 
                     <x-nav-link :href="route('report.netProfit')" :active="request()->routeIs('report.netProfit')">
@@ -103,26 +97,28 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <!-- resources/views/layouts/navbar.blade.php -->
-
-            <x-responsive-nav-link  :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-
-            <!-- resources/views/layouts/navigation.blade.php -->
             <x-responsive-nav-link  :href="route('home')" :active="request()->routeIs('home')">
-                {{ __('Inicio') }}
+                {{ __('Home') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link  :href="route('eggProduction.create')" :active="request()->routeIs('create')">
                 {{ __('Egg Production') }}
             </x-responsive-nav-link>
 
+            <x-responsive-nav-link  :href="route('sales.create')" :active="request()->routeIs('sales.create')">
+                {{ __('Sales') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link  :href="route('sales.history')" :active="request()->routeIs('sales.history')">
+                {{ __('Sales History') }}
+            </x-responsive-nav-link>
+
             <x-responsive-nav-link  :href="route('inventories.view')" :active="request()->routeIs('view')">
                 {{ __('Inventories') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link  :href="route('sales.index')" :active="request()->routeIs('sales.index')">
-                {{ __('Sales') }}
+            <x-responsive-nav-link  :href="route('sales.revenue.form')" :active="request()->routeIs('sales.revenue')">
+                {{ __('Revenue') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link  :href="route('expenses.index')" :active="request()->routeIs('expenses.index')">

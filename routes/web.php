@@ -50,9 +50,11 @@ Route::post('/ventas/agregar', [InventoryController::class, 'addSale'])->name('s
 Route::get('/sales/revenue', [SaleController::class, 'showRevenueForm'])->name('sales.revenue.form');
 Route::post('/sales/revenue', [SaleController::class, 'calculateRevenue'])->name('sales.revenue.calculate');
 
-
 // Ruta para ver reporte utilidad
 Route::get('/report/net-profit', [ReportController::class, 'netProfit'])->name('report.netProfit');
+
+// Ruta para Historial de Ventas
+Route::get('sales/history', [SaleController::class, 'historialVentas'])->name('sales.history');
 
 // Ruta para Ventas
 Route::resource('sales', SaleController::class);
@@ -60,34 +62,17 @@ Route::resource('sales', SaleController::class);
 // Ruta para registro de gastos
 Route::resource('expenses', ExpenseController::class);
 
-
-
 /* Modales  Ruta para Ventas  */
-
 Route::get('/modal-content', function () {
     return view('modal-content');
 });
-
 
 // Ruta para modal Sales 
 Route::get('/sales/modal-show', function () {
     return view('/sales/modal-show');
 });
 
-
-// Ruta para Ventas 
-Route::resource('ventas', VentasController::class);
-
-
-// Ruta para la vista principal de ventas
-Route::get('/ventas', [VentasController::class, 'index'])->name('ventas.index');
-
 // Ruta para cargar el contenido del modal
 Route::get('/modal-content', [VentasController::class, 'modalContent'])->name('ventas.modalContent');
-
-//menu 2
-Route::get('/menu2', function () {
-    return view('menu2');
-})->name('menu2');
 
 require __DIR__.'/auth.php';

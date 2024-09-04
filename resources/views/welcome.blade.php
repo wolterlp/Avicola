@@ -35,7 +35,7 @@
             @if (Route::has('login'))
                 <div class="mt-8">
                     @auth
-                        <a href="{{ url('sales/create') }}" class="btn bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700 font-semibold">{{ __("Comenzar") }}</a>
+                        <a href="{{ url('eggProduction/create') }}" class="btn bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700 font-semibold">{{ __("Comenzar") }}</a>
                     @else
                         <a href="{{ route('login') }}" class="btn text-pink-600 hover:text-pink-800 font-semibold">{{ __("Log in") }}</a>
 
