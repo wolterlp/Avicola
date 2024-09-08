@@ -13,13 +13,44 @@ use Illuminate\Support\Facades\DB;
 class SaleController extends Controller
 {
     //
-    public function historialVentas()
+    public function historialVentas(Request $request)
     {
+
+        // Validar las fechas recibidas
+        $validated = $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+        ]);
+        
+        // Si no se proporcionan fechas, usa un rango predeterminado (el mes actual)
+        if (empty($validated['start_date']) || empty($validated['end_date'])) {
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth();
+        } else {
+            // Formatear las fechas proporcionadas para considerar todo el día
+            $startDate = Carbon::parse($validated['start_date'])->startOfDay();
+            $endDate = Carbon::parse($validated['end_date'])->endOfDay();
+        }
+
+        // fechas usadas en la consulta
+        $fec_ini = $startDate ->format('d-m-Y');
+        $fec_fin = $endDate ->format('d-m-Y');
+
+
+        // realizamos la consulta
+        $sales = Sale::with('eggCategory', 'user') 
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->orderBy('created_at', 'desc')
+        ->paginate(6); // 10 ventas por página
+
+
+/*
+
         $sales = Sale::with('eggCategory', 'user')
         ->orderBy('created_at', 'desc')
-        ->get();
-       
-        return view('sales.history', compact('sales'));
+        ->paginate(10); // 10 ventas por página
+      */ 
+        return view('sales.history', compact('sales', 'fec_ini', 'fec_fin'));
     }
 
     public function create()
@@ -69,7 +100,7 @@ class SaleController extends Controller
         }
 
 
-        return redirect()->route('sales.index')->with('success', 'Venta registrada correctamente.');
+        return redirect()->route('sales.create')->with('success', 'Venta registrada correctamente.');
     }
     
     public function show($id)

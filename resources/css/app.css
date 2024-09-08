@@ -1,11 +1,17 @@
 /* Estilo para el contorno del formulario */
     .form-container {
-        @apply border-2 border-pink-500 p-4 rounded-lg ;
+        @apply border-2 border-pink-500 p-4 rounded-lg 
+        mx-auto 
+        sm:px-6
+        lg:px-8
+        p-4
+        max-w-4xl
+        overflow-x-auto;
     }
 
     /* Estilo para los campos de entrada del formulario */
     .form-input {
-        @apply mt-1 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500;
+        @apply mt-3 px-1 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500;
     }
 
     /* Estilo para los botones del formulario */
@@ -22,6 +28,7 @@
 
 /*Estilos Tablas*/
     .financial-summary {
+        @apply overflow-x-auto;
         margin-top: 1rem; /* Espaciado superior */
         padding: 1rem; /* Espaciado interno */
         border: 1px solid #e2e8f0; /* Borde ligero */
@@ -34,18 +41,20 @@
         margin-top: 1rem; /* Espaciado superior */
         width: 100%; /* Ancho completo */
         border-collapse: collapse; /* Colapsa los bordes */
+        @apply table-auto min-w-full;
     }
 
     .financial-table th, .financial-table td {
         border: 1px solid #e2e8f0; /* Borde ligero */
         padding: 0.75rem; /* Espaciado interno */
         text-align: left; /* Alineación del texto */
+        @apply text-sm sm:text-base;
     }
 
     .financial-table th {
         background-color: #f3f4f6; /* Fondo de encabezado */
         color: #1f2937; /* Color del texto */
-        font-weight: 600; /* Peso de la fuente */
+        font-weight: 400; /* Peso de la fuente */
     }
 
     .financial-table td {

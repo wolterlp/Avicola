@@ -25,7 +25,7 @@ class ReportController extends Controller
             'end_date' => 'nullable|date',
         ]);
         
-        // Si no se proporcionan fechas, usa un rango predeterminado (por ejemplo, el mes actual)
+        // Si no se proporcionan fechas, usa un rango predeterminado (el mes actual)
         if (empty($validated['start_date']) || empty($validated['end_date'])) {
             $startDate = Carbon::now()->startOfMonth();
             $endDate = Carbon::now()->endOfMonth();
@@ -36,7 +36,7 @@ class ReportController extends Controller
         }
 
         // Fechas
-        $fec_inicio = $startDate ->format('d-m-Y');
+        $fec_ini = $startDate ->format('d-m-Y');
         $fec_fin = $endDate ->format('d-m-Y');
 
         // Calcular los ingresos totales
@@ -51,7 +51,7 @@ class ReportController extends Controller
         $netProfit = $totalRevenue - $totalExpenses;
 
         // Devolver una vista con los resultados
-       return view('reports.net_profit', compact('totalRevenue', 'totalExpenses', 'netProfit', 'fec_inicio', 'fec_fin'));
+       return view('reports.net_profit', compact('totalRevenue', 'totalExpenses', 'netProfit', 'fec_ini', 'fec_fin'));
         
       // return "Hola netProfit";
     }

@@ -62,9 +62,9 @@ Route::resource('sales', SaleController::class);
 // Ruta para registro de gastos
 Route::resource('expenses', ExpenseController::class);
 
-/* Modales  Ruta para Ventas  */
-Route::get('/modal-content', function () {
-    return view('modal-content');
+/* Modales  Ruta para alert */
+Route::get('/modal-alert', function () {
+    return view('modal-alert');
 });
 
 // Ruta para modal Sales 
