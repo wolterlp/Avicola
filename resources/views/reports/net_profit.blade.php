@@ -1,3 +1,12 @@
+@push('scripts')
+    <script src="{{ mix('js/app.js') }}"></script>
+@endpush
+
+<!-- Ocultar los valores que se necesitan en app.js -->
+<input type="hidden" id="totalRevenue" value="{{ $totalRevenue }}">
+<input type="hidden" id="totalExpenses" value="{{ $totalExpenses }}">
+<input type="hidden" id="netProfit" value="{{ $netProfit }}">
+
 <x-app-layout>
     <!-- Encabezado del Dashboard -->
     <x-slot name="header">
@@ -76,53 +85,9 @@
                     </select>
                     <div>
                         <canvas id="dynamicChart" width="500" height="500"></canvas>
+                       
                     </div>
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                    <script>
-                        var ctx3 = document.getElementById('dynamicChart').getContext('2d');
-
-                        // Datos del gráfico
-                        var chartData = {
-                            labels: ['Ingresos', 'Gastos', 'Utilidad Neta'],
-                            datasets: [{
-                                label: 'Monto en $',
-                                data: [{{ $totalRevenue }}, {{ $totalExpenses }}, {{ $netProfit }}],
-                                backgroundColor: ['#4caf50', '#f44336', '#2196f3'],
-                                borderColor: ['#388e3c', '#d32f2f', '#1976d2'],
-                                borderWidth: 1
-                            }]
-                        };
-                        // Opciones del gráfico
-                        var chartOptions = {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        };
-                        // Crear el gráfico inicialmente como un gráfico de barras
-                        var dynamicChart = new Chart(ctx3, {
-                            type: 'bar', // Tipo de gráfico por defecto
-                            data: chartData,
-                            options: chartOptions
-                        });
-                        // Función para actualizar el gráfico
-                        function updateChartType(newType) {
-                            dynamicChart.destroy(); // Destruir el gráfico anterior
-                            dynamicChart = new Chart(ctx3, {
-                                type: newType, // Nuevo tipo de gráfico seleccionado
-                                data: chartData,
-                                options: chartOptions
-                            });
-                        }
-                        // Escuchar el cambio en el select
-                        document.getElementById('chartTypeSelector').addEventListener('change', function() {
-                            var selectedType = this.value;
-                            updateChartType(selectedType); // Actualizar el gráfico con el nuevo tipo
-                        });
-
-                    </script>
-                </div>
+                 </div>
             </div>
         </div>
     </div>

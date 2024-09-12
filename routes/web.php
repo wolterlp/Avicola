@@ -36,25 +36,32 @@ Route::middleware('auth')->group(function () {
 });
 
 // Ruta para mostrar el formulario de registro de producción de huevos
-Route::get('eggProduction/create', [EggProductionController::class, 'create'])->name('eggProduction.create');
+Route::get('eggProduction/create', [EggProductionController::class, 'create'])->middleware(['auth', 'verified'])->name('eggProduction.create');
 
 // Ruta para almacenar los datos del formulario
-Route::post('eggProduction', [EggProductionController::class, 'store'])->name('eggProduction.store');
+Route::post('eggProduction', [EggProductionController::class, 'store'])->middleware(['auth', 'verified'])->name('eggProduction.store');
 
 // Ruta para mostrar el inventario de producción de huevos
-Route::get('/inventories/view', [InventoryController::class, 'view'])->name('inventories.view');
-Route::post('/produccion/agregar', [InventoryController::class, 'addProduction'])->name('eggProduction.store');
-Route::post('/ventas/agregar', [InventoryController::class, 'addSale'])->name('sales.store');
+Route::get('/inventories/view', [InventoryController::class, 'view'])->middleware(['auth', 'verified'])->name('inventories.view');
+Route::post('/produccion/agregar', [InventoryController::class, 'addProduction'])->middleware(['auth', 'verified'])->name('eggProduction.store');
+Route::post('/ventas/agregar', [InventoryController::class, 'addSale'])->middleware(['auth', 'verified'])->name('sales.store');
 
 // Rutas ingresos por ventas
-Route::get('/sales/revenue', [SaleController::class, 'showRevenueForm'])->name('sales.revenue.form');
-Route::post('/sales/revenue', [SaleController::class, 'calculateRevenue'])->name('sales.revenue.calculate');
+Route::get('/sales/revenue', [SaleController::class, 'showRevenueForm'])->middleware(['auth', 'verified'])->name('sales.revenue.form');
+Route::post('/sales/revenue', [SaleController::class, 'calculateRevenue'])->middleware(['auth', 'verified'])->name('sales.revenue.calculate');
 
 // Ruta para ver reporte utilidad
-Route::get('/report/net-profit', [ReportController::class, 'netProfit'])->name('report.netProfit');
+Route::get('/report/net-profit', [ReportController::class, 'netProfit'])->middleware(['auth', 'verified'])->name('report.netProfit');
+Route::get('/report/report_sales', [ReportController::class, 'reportSales'])->middleware(['auth', 'verified'])->name('report.reportSales');
+Route::get('/report/report_production', [ReportController::class, 'reportProduction'])->middleware(['auth', 'verified'])->name('report.reportProduction');
+Route::get('/report/report_expenses', [ReportController::class, 'reportSales'])->middleware(['auth', 'verified'])->name('report.reportExpenses');
+
+
+
+
 
 // Ruta para Historial de Ventas
-Route::get('sales/history', [SaleController::class, 'historialVentas'])->name('sales.history');
+Route::get('sales/history', [SaleController::class, 'historialVentas'])->middleware(['auth', 'verified'])->name('sales.history');
 
 // Ruta para Ventas
 Route::resource('sales', SaleController::class);
@@ -73,6 +80,6 @@ Route::get('/sales/modal-show', function () {
 });
 
 // Ruta para cargar el contenido del modal
-Route::get('/modal-content', [VentasController::class, 'modalContent'])->name('ventas.modalContent');
+Route::get('/modal-content', [VentasController::class, 'modalContent'])->middleware(['auth', 'verified'])->name('ventas.modalContent');
 
 require __DIR__.'/auth.php';

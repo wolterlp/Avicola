@@ -118,6 +118,44 @@
     }
 /* Fin Modales*/
 
+/* inicio menu*/
+    /* Contenedor del menú desplegable */
+ 
+    .dropdown-item {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #4a5568; /* Color de texto */
+        text-decoration: none;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* Fondo en hover para el menú desplegable */
+    .dropdown-item:hover {
+        background-color: #f0f0f0; /* Fondo en hover para modo claro */
+        color:rgb(156 163 175); /* Color de texto en hover */
+        font-weight: 600; /* Resalta el texto en negrita */
+    }
+
+    /* Estilo para la opción activa */
+    .dropdown-item.active {
+        border-bottom: 2px solid #4a5568; /* Línea inferior en la opción activa */
+        color:rgb(67, 56, 202); /* Color de texto en la opción activa */
+        font-weight: 600; /* Resalta el texto en negrita */
+    }
+
+    /* Fondo oscuro para el modo oscuro */
+    .dark .dropdown-item:hover {
+        background-color: #4a5568; /* Fondo en hover para modo oscuro */
+        color: #edf2f7; /* Color de texto en hover */
+    }
+
+    .dark .dropdown-item.active {
+        border-bottom: 2px solid #edf2f7; /* Línea inferior en modo oscuro */
+        color: #edf2f7; /* Color de texto en la opción activa */
+    }
+
+/*fin menu*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

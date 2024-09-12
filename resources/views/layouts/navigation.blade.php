@@ -41,9 +41,26 @@
                         {{ __('Expenses') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('report.netProfit')" :active="request()->routeIs('report.netProfit')">
-                        {{ __('Net Income Report') }}
-                    </x-nav-link>
+                    <!--div class="relative group hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"-->
+                    <div class="relative group sm:flex">
+                        <x-nav-link class="">
+                            {{ __('Report') }}
+                        </x-nav-link>
+                        <div class="absolute left-0 z-10 hidden group-hover:block bg-white dark:bg-gray-800 shadow-lg mt-2">
+                            <x-dropdown-link :href="route('report.netProfit')" class="dropdown-item {{ request()->routeIs('report.netProfit') ? 'active' : '' }}" >
+                                {{ __('Report Net Income') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('report.reportSales')"  class="dropdown-item {{ request()->routeIs('report.reportSales') ? 'active' : '' }}">
+                                {{ __('Report Sales') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('report.reportProduction')"  class="dropdown-item {{ request()->routeIs('report.reportProduction') ? 'active' : '' }}">
+                                {{ __('Report Production') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('report.reportExpenses')"  class="dropdown-item {{ request()->routeIs('report.reportExpenses') ? 'active' : '' }}">
+                                {{ __('Report Expenses') }}
+                            </x-dropdown-link>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -125,8 +142,8 @@
                 {{ __('Expenses') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link  :href="route('report.netProfit')" :active="request()->routeIs('report.netProfit')">
-                {{ __('Net Income Report') }}
+            <x-responsive-nav-link :href="route('report.netProfit')" :active="request()->routeIs('report.netProfit')">
+                {{ __('Report') }}
             </x-responsive-nav-link>
 
         </div>
