@@ -54,11 +54,7 @@ Route::post('/sales/revenue', [SaleController::class, 'calculateRevenue'])->midd
 Route::get('/report/net-profit', [ReportController::class, 'netProfit'])->middleware(['auth', 'verified'])->name('report.netProfit');
 Route::get('/report/report_sales', [ReportController::class, 'reportSales'])->middleware(['auth', 'verified'])->name('report.reportSales');
 Route::get('/report/report_production', [ReportController::class, 'reportProduction'])->middleware(['auth', 'verified'])->name('report.reportProduction');
-Route::get('/report/report_expenses', [ReportController::class, 'reportSales'])->middleware(['auth', 'verified'])->name('report.reportExpenses');
-
-
-
-
+Route::get('/report/report_expenses', [ReportController::class, 'reportExpenses'])->middleware(['auth', 'verified'])->name('report.reportExpenses');
 
 // Ruta para Historial de Ventas
 Route::get('sales/history', [SaleController::class, 'historialVentas'])->middleware(['auth', 'verified'])->name('sales.history');
@@ -78,8 +74,5 @@ Route::get('/modal-alert', function () {
 Route::get('/sales/modal-show', function () {
     return view('/sales/modal-show');
 });
-
-// Ruta para cargar el contenido del modal
-Route::get('/modal-content', [VentasController::class, 'modalContent'])->middleware(['auth', 'verified'])->name('ventas.modalContent');
 
 require __DIR__.'/auth.php';

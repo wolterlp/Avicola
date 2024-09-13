@@ -44,7 +44,7 @@
                     <!--div class="relative group hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"-->
                     <div class="relative group sm:flex">
                         <x-nav-link class="">
-                            {{ __('Report') }}
+                            {{ __('Reports') }}
                         </x-nav-link>
                         <div class="absolute left-0 z-10 hidden group-hover:block bg-white dark:bg-gray-800 shadow-lg mt-2">
                             <x-dropdown-link :href="route('report.netProfit')" class="dropdown-item {{ request()->routeIs('report.netProfit') ? 'active' : '' }}" >
@@ -143,7 +143,7 @@
             </x-responsive-nav-link>
 
             <x-responsive-nav-link :href="route('report.netProfit')" :active="request()->routeIs('report.netProfit')">
-                {{ __('Report') }}
+                {{ __('Reports') }}
             </x-responsive-nav-link>
 
         </div>

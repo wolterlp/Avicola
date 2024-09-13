@@ -1,17 +1,30 @@
 /* Estilo para el contorno del formulario */
     .form-container {
-        @apply border-2 border-pink-500 p-4 rounded-lg 
-        mx-auto 
-        sm:px-6
-        lg:px-8
-        p-4
-        max-w-4xl
-        overflow-x-auto;
+        @apply   dark:text-gray-100 border-2 border-pink-500 p-4 rounded-lg;
+        padding: 6px;
     }
 
-    /* Estilo para los campos de entrada del formulario */
+    .form-container input {
+        @apply bg-transparent;
+    }
+
     .form-input {
-        @apply mt-3 px-1 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500;
+        @apply bg-transparent;
+    }
+
+    /* Estilo para los elementos select */
+    select.form-input {
+        background-color: transparent;
+        color: inherit;
+        appearance: none;
+        -webkit-appearance: none; /* Para eliminar el estilo por defecto en navegadores WebKit */
+        -moz-appearance: none;
+    }
+
+    /* Estilo para las opciones del select */
+    select.form-input option {
+        background-color: transparent !important;
+        color: black !important; /* Asegura que el texto sea negro */
     }
 
     /* Estilo para los botones del formulario */
@@ -25,6 +38,12 @@
     }
 
 /* Fin Estilo para el contorno del formulario */
+
+/* Estilo Reportes*/
+
+
+
+/* Fin Estilo Reportes*/
 
 /*Estilos Tablas*/
     .financial-summary {
@@ -41,7 +60,15 @@
         margin-top: 1rem; /* Espaciado superior */
         width: 100%; /* Ancho completo */
         border-collapse: collapse; /* Colapsa los bordes */
-        @apply table-auto min-w-full;
+       /* @apply table-auto min-w-full;*/
+       /* @apply max-h-80 overflow-y-auto; */
+    }
+
+    .financial-summary a {
+        color: #ec4899;       /* Cambiar color de texto a negro */
+        font-weight: 600;   /* Cambiar el grosor de la letra */
+        display: block;     /* Para que el 'a' ocupe todo el ancho del div */
+        text-align: center; /* Centrar el contenido */
     }
 
     .financial-table th, .financial-table td {

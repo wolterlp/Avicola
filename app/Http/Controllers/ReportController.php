@@ -112,52 +112,6 @@ class ReportController extends Controller
       
     }
     
-    public function reportProductionOld(Request $request)
-    {
-        // Validar las fechas recibidas
-        $validated = $request->validate([
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date',
-        ]);
-
-        // Si no se proporcionan fechas, usa un rango predeterminado (el mes actual)
-        if (empty($validated['start_date']) || empty($validated['end_date'])) {
-            $startDate = Carbon::now()->startOfMonth();
-            $endDate = Carbon::now()->endOfMonth();
-        } else {
-            // Formatear las fechas proporcionadas para considerar todo el día
-            $startDate = Carbon::parse($validated['start_date'])->startOfDay();
-            $endDate = Carbon::parse($validated['end_date'])->endOfDay();
-        }
-        
-        // Calcular la producción total de huevos
-        $totalProduction = EggProduction::whereBetween('created_at', [$startDate, $endDate])
-                                ->sum('quantity');
-
-        // Obtener los datos para los gráficos
-        $dailyProductionData = EggProduction::selectRaw('DATE(created_at) as date, SUM(quantity) as total')
-                                ->whereBetween('created_at', [$startDate, $endDate])
-                                ->groupBy('date')
-                                ->orderBy('date')
-                                ->get();
-
-        $monthlyProductionData = EggProduction::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(quantity) as total')
-                                    ->whereBetween('created_at', [$startDate->startOfYear(), $endDate->endOfYear()])
-                                    ->groupBy('year', 'month')
-                                    ->orderBy('year')
-                                    ->orderBy('month')
-                                    ->get();
-
-        $yearlyProductionData = EggProduction::selectRaw('YEAR(created_at) as year, SUM(quantity) as total')
-                                ->whereBetween('created_at', [$startDate->startOfDecade(), $endDate->endOfDecade()])
-                                ->groupBy('year')
-                                ->orderBy('year')
-                                ->get();
-
-        // Devolver una vista con los resultados
-        return view('reports.report_production', compact('totalProduction', 'startDate', 'endDate', 'dailyProductionData', 'monthlyProductionData', 'yearlyProductionData'));
-    }
-
     public function reportProduction(Request $request)
     {
         // Validar las fechas recibidas
@@ -175,6 +129,9 @@ class ReportController extends Controller
             $startDate = Carbon::parse($validated['start_date'])->startOfDay();
             $endDate = Carbon::parse($validated['end_date'])->endOfDay();
         }
+
+        $fec_ini = $startDate ->format('d-m-Y');
+        $fec_fin = $endDate ->format('d-m-Y');
     
         // Calcular la producción total de huevos
         $totalProduction = DB::table('egg_productions')
@@ -215,8 +172,8 @@ class ReportController extends Controller
         // Devolver una vista con los resultados
         return view('reports.report_production', compact(
             'totalProduction', 
-            'startDate', 
-            'endDate', 
+            'fec_ini', 
+            'fec_fin', 
             'dailyProductionData', 
             'monthlyProductionData', 
             'yearlyProductionData', 
@@ -224,6 +181,67 @@ class ReportController extends Controller
         ));
     }
     
-
+    public function reportExpenses(Request $request)
+    {
+        // Validar las fechas recibidas
+        $validated = $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+        ]);
+    
+        // Si no se proporcionan fechas, usa un rango predeterminado (el mes actual)
+        if (empty($validated['start_date']) || empty($validated['end_date'])) {
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth();
+        } else {
+            // Formatear las fechas proporcionadas para considerar todo el día
+            $startDate = Carbon::parse($validated['start_date'])->startOfDay();
+            $endDate = Carbon::parse($validated['end_date'])->endOfDay();
+        }
+    
+        $fec_ini = $startDate->format('d-m-Y');
+        $fec_fin = $endDate->format('d-m-Y');
+    
+        // Calcular el total de gastos
+        $totalExpenses = DB::table('expenses')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('amount');
+    
+        // Obtener los datos para los gráficos diarios
+        $dailyExpensesData = DB::table('expenses')
+            ->selectRaw('DATE(created_at) as date, SUM(amount) as total')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get();
+    
+        // Obtener los datos para los gráficos mensuales
+        $monthlyExpensesData = DB::table('expenses')
+            ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(amount) as total')
+            ->whereBetween('created_at', [$startDate->startOfYear(), $endDate->endOfYear()])
+            ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
+            ->orderBy('year')
+            ->orderBy('month')
+            ->get();
+    
+        // Obtener los datos para los gráficos anuales
+        $yearlyExpensesData = DB::table('expenses')
+            ->selectRaw('YEAR(created_at) as year, SUM(amount) as total')
+            ->whereBetween('created_at', [$startDate->startOfDecade(), $endDate->endOfDecade()])
+            ->groupBy(DB::raw('YEAR(created_at)'))
+            ->orderBy('year')
+            ->get();
+        
+        // Devolver una vista con los resultados
+        return view('reports.report_expenses', compact(
+            'totalExpenses', 
+            'fec_ini', 
+            'fec_fin', 
+            'dailyExpensesData', 
+            'monthlyExpensesData', 
+            'yearlyExpensesData'
+        ));
+    }
+    
     
 }

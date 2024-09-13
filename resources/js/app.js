@@ -126,8 +126,10 @@ function createReportSalesCharts() {
     const dailyLabels = dailySalesData.map(data => data.date);
     const dailyValues = dailySalesData.map(data => parseFloat(data.total));
 
-    const monthlyLabels = monthlySalesData.map(data => data.month); // Asumiendo el formato correcto
+
+    const monthlyLabels = monthlySalesData.map(data => `${data.year}-${data.month}`);
     const monthlyValues = monthlySalesData.map(data => parseFloat(data.total)); // Asumiendo el formato correcto
+
 
     const yearlyLabels = yearlySalesData.map(data => data.year); // Asumiendo el formato correcto
     const yearlyValues = yearlySalesData.map(data => parseFloat(data.total)); // Asumiendo el formato correcto
@@ -167,6 +169,8 @@ function createReportSalesCharts() {
     };
 
     var chartOptions = {
+        responsive: true,  // Asegura que el gráfico sea responsivo
+        maintainAspectRatio: false,  // Permite que el gráfico no mantenga una relación de aspecto fija
         scales: {
             y: {
                 beginAtZero: true
@@ -224,14 +228,15 @@ function creatReportProductionCharts() {
             datasets: [{
                 label: 'Producción Diaria',
                 data: dailyData.map(d => d.total),
-                borderColor: 'rgba(255, 99, 132, 1)', // Rosa
-                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Verde claro
+                borderColor: '#1976d2', // Rosa
+                backgroundColor: '#1976d2', 
                 borderWidth: 2, // Ancho del borde
                 fill: false, // No rellenar el área debajo de la línea
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,  // Permite que el gráfico no mantenga una relación de aspecto fija
             scales: {
                 x: {
                     beginAtZero: true
@@ -250,14 +255,15 @@ function creatReportProductionCharts() {
             datasets: [{
                 label: 'Producción Mensual',
                 data: monthlyData.map(d => d.total),
-                borderColor: 'rgba(255, 99, 132, 1)', // Rosa
-                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Verde claro
+                //borderColor: 'rgba(255, 99, 132, 1)', // Rosa
+                backgroundColor: '#00796B', 
                 borderWidth: 2, // Ancho del borde
                 fill: true, // No rellenar el área debajo de la línea
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,  // Permite que el gráfico no mantenga una relación de aspecto fija
             scales: {
                 x: {
                     beginAtZero: true
@@ -276,14 +282,23 @@ function creatReportProductionCharts() {
             datasets: [{
                 label: 'Producción Anual',
                 data: yearlyData.map(d => d.total),
-                borderColor: 'rgba(255, 99, 132, 1)', // Rosa
-                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Verde claro
+                //borderColor: 'rgba(255, 99, 132, 1)', // Rosa
+                backgroundColor: '#1E3A8A', 
                 borderWidth: 2, // Ancho del borde
-                fill: true, // No rellenar el área debajo de la línea
+                fill: false, // No rellenar el área debajo de la línea
             }]
         },
         options: {
-            responsive: true
+            responsive: true,
+            maintainAspectRatio: false,  // Permite que el gráfico no mantenga una relación de aspecto fija
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
     });
 
@@ -294,20 +309,130 @@ function creatReportProductionCharts() {
             datasets: [{
                 label: 'Producción x Categoria mensual o segun rango de fecha',
                 data: categoryData.map(d => d.total),
-                backgroundColor: ['#f48fb1', '#d32f2f', '#1976d2', '#ff5722'],
-                borderColor: ['#f48fb1', '#d32f2f', '#1976d2','#ff5722'],
+                backgroundColor: ['#673AB7', '#d32f2f', '#1976d2', '#ff5722'],
+                borderColor: ['#673AB7', '#d32f2f', '#1976d2','#ff5722'],
                 borderWidth: 2, // Ancho del borde
                 fill: true, // No rellenar el área debajo de la línea
             }]
         },
         options: {
-            responsive: true
+            maintainAspectRatio: false,  // Permite que el gráfico no mantenga una relación de aspecto fija
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
     });
 };
 
 //document.addEventListener('DOMContentLoaded', );
 //fin reporte produccion  
+
+//Reporte Gastos
+
+function createReportExpensesCharts() {
+
+    //document.addEventListener('DOMContentLoaded', () => {
+        // Obtén los datos desde los scripts JSON
+        const dailyData = JSON.parse(document.getElementById('dailyExpensesData').textContent);
+        const monthlyData = JSON.parse(document.getElementById('monthlyExpensesData').textContent);
+        const yearlyData = JSON.parse(document.getElementById('yearlyExpensesData').textContent);
+        
+    
+        // Configura los contextos para los gráficos
+        const ctxDailyExpenses = document.getElementById('dailyExpensesChart').getContext('2d');
+        const ctxMonthlyExpenses = document.getElementById('monthlyExpensesChart').getContext('2d');
+        const ctxYearlyExpenses = document.getElementById('yearlyExpensesChart').getContext('2d');
+        
+    
+        // Inicializa los gráficos
+        const dailyChart = new Chart(ctxDailyExpenses, {
+            type: 'line', // Tipo inicial del gráfico
+            data: {
+                labels: dailyData.map(d => d.date),
+                datasets: [{
+                    label: 'Producción Diaria',
+                    data: dailyData.map(d => d.total),
+                    borderColor: 'rgba(255, 99, 132, 1)', // Rosa
+                    backgroundColor: '#4caf50', 
+                    borderWidth: 2, // Ancho del borde
+                    fill: true, // No rellenar el área debajo de la línea
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,  // Permite que el gráfico no mantenga una relación de aspecto fija
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    
+        const monthlyChart = new Chart(ctxMonthlyExpenses, {
+            type: 'line', // Tipo inicial del gráfico
+            data: {
+                labels: monthlyData.map(d => `${d.month}/${d.year}`),
+                datasets: [{
+                    label: 'Producción Mensual',
+                    data: monthlyData.map(d => d.total),
+                    borderColor: 'rgba(255, 99, 132, 1)', // Rosa
+                    backgroundColor: '#0097A7', 
+                    borderWidth: 2, // Ancho del borde
+                    fill: true, // No rellenar el área debajo de la línea
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,  // Permite que el gráfico no mantenga una relación de aspecto fija
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    
+        const yearlyChart = new Chart(ctxYearlyExpenses, {
+            type: 'line', // Tipo inicial del gráfico
+            data: {
+                labels: yearlyData.map(d => d.year),
+                datasets: [{
+                    label: 'Producción Anual',
+                    data: yearlyData.map(d => d.total),
+                    borderColor: 'rgba(255, 99, 132, 1)', // Rosa
+                    backgroundColor: '#2196f3', 
+                    borderWidth: 2, // Ancho del borde
+                    fill: true, // No rellenar el área debajo de la línea
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,  // Permite que el gráfico no mantenga una relación de aspecto fija
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    };
+
+// Fin de Reporte Gatos  createReportExpensesCharts
 
 //llamado de funciones
 
@@ -322,8 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if(currentURL === "/report/net-profit"){
         createAndUpdateChart();
     }else if(currentURL === "/report/report_expenses"){
-        console.log(currentURL);
-        creatReportExpensesCharts();
+        createReportExpensesCharts();
     }
 });
 

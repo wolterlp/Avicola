@@ -2,11 +2,6 @@
     <script src="{{ mix('js/app.js') }}"></script>
 @endpush
 
-<!-- Datos ocultos necesarios para app.js -->
-<input type="hidden" id="totalRevenue" value="{{ $totalRevenue }}">
-<input type="hidden" id="totalExpenses" value="{{ $totalExpenses }}">
-<input type="hidden" id="netProfit" value="{{ $netProfit }}">
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-pink-600 dark:text-pink-400 leading-tight">
@@ -22,152 +17,110 @@
 
     <div class="py-12">
         <!-- Contenedor principal con diseño responsivo -->
-        <div class="mx-auto max-w-7xl p-2 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sm:px-6 lg:px-8">
-            
-            <!-- Sección del formulario de reportes -->
-            <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
-                <div class="form-container w-full ">
-                    <form method="GET" action="{{ route('report.reportSales') }}" class="form-wrapper">
-                        <div class="flex flex-col mb-4">
-                            <label for="start_date" class="text-pink-500 font-semibold"> {{ __('Fecha de Inicio') }}:</label>
-                            <input type="date" id="start_date" name="start_date" class="form-input" required>
-                        </div>
-                        <div class="flex flex-col mb-4">
-                            <label for="end_date" class="text-pink-500 font-semibold"> {{ __('Fecha de Fin') }}:</label>
-                            <input type="date" id="end_date" name="end_date" class="form-input" required>
-                        </div>
-                        <div class="flex justify-center">
-                            <button type="submit" class="form-button">
-                                {{ __('Generar Reporte') }}
-                            </button>
-                        </div>
-                    </form>
+        <div class="max-w-7x1 mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"> 
+                <!-- Sección del formulario de reportes -->
+                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <div class="form-container w-full p-6 ">
+                        <form method="GET" action="{{ route('report.reportSales') }}" class="form-wrapper">
+                            @csrf    
+                            <div class="flex flex-col mb-4">
+                                <label for="start_date" class="text-pink-500 font-semibold"> {{ __('Fecha de Inicio') }}:</label>
+                                <input type="date" id="start_date" name="start_date" class="form-input" required>
+                            </div>
+                            <div class="flex flex-col mb-4">
+                                <label for="end_date" class="text-pink-500 font-semibold"> {{ __('Fecha de Fin') }}:</label>
+                                <input type="date" id="end_date" name="end_date" class="form-input" required>
+                            </div>
+                            <div class="flex justify-center">
+                                <button type="submit" class="form-button">
+                                    {{ __('Generar Reporte') }}
+                                </button>
+                            </div>
+                            <div class="flex justify-center">    
+                                <a>Gatos del {{ __($fec_ini) }} Al {{ __($fec_fin) }}</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Sección de resumen financiero y gráficos -->
-            @if (isset($startDate) && isset($endDate))
-                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <!-- Resumen financiero -->
-                    <div class="form-container w-full sm:w-1/2">
-                        <h3 class="font-semibold text-lg text-pink-600">{{ __('Informe Financiero') }}</h3>
-                        <table class="financial-table">
-                            <thead>
-                                <tr>
-                                    <th colspan="2">Reporte Del {{ $startDate }} Al {{ $endDate }} </th>
-                                </tr>
-                                <tr>
-                                    <th class="descrip">{{ __('Descripción') }}</th>
-                                    <th class="descrip">{{ __('Monto') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{ __('Ingresos Totales') }}</td>
-                                    <td>$ {{ number_format($totalRevenue, 2, ',', '.') }}</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ __('Gastos Totales') }}</td>
-                                    <td>$ {{ number_format($totalExpenses, 2, ',', '.') }}</td>
-                                </tr>
-                                <tr class="total-row">
-                                    <td>{{ __('Utilidad Neta') }}</td>
-                                    <td>$ {{ number_format($netProfit, 2, ',', '.') }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <!-- Selección de tipo de gráfico y gráfico dinámico -->
-                        <select id="chartTypeSelector" class="form-select mb-4 mt-12">
-                            <option value="bar">{{ __('Bar') }}</option>
-                            <option value="pie">{{ __('Pie') }}</option>
-                            <option value="line">{{ __('Line') }}</option>
-                            <option value="radar">{{ __('Radar') }}</option>
-                            <option value="polarArea">{{ __('Polar Area') }}</option>
-                            <option value="scatter">{{ __('Scatter') }}</option>
-                            <option value="doughnut">{{ __('Doughnut') }}</option>
-                        </select>
-                        <div>
-                            <canvas id="dynamicChart" width="300" height="300"></canvas>
-                        </div>
-                    </div>
-                
-            @endif
-
-                    <!-- Sección de ventas diarias, mensuales y anuales -->
-                    <!-- Ventas Diarias -->
-                    <div class="form-container w-full sm:w-1/2">
-                        <h3 class="font-semibold text-lg text-pink-600">{{ __('Ventas Diarias') }}</h3>
-                        <table class="financial-table">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Fecha') }}</th>
-                                    <th>{{ __('Ventas Totales') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($dailySalesData as $sale)
+                <!-- Sección de resumen financiero y gráficos -->
+                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4"-->
+                        <!-- Sección de Gastos diarias, mensuales y anuales -->
+                        <!-- Gastos Diarias -->
+                        <div class="form-container w-full mx-auto">
+                            <h3 class="font-semibold text-lg text-pink-600">{{ __('Gastos Diarias') }}</h3>
+                            <table class="financial-table">
+                                <thead>
                                     <tr>
-                                        <td>{{ $sale->date }}</td>
-                                        <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
+                                        <th>{{ __('Fecha') }}</th>
+                                        <th>{{ __('Gastos Totales') }}</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="mt-12">
-                            <canvas id="dailySalesChart" width="300" height="300"></canvas>
+                                </thead>
+                                <tbody>
+                                    @foreach ($dailyExpensesData as $sale)
+                                        <tr>
+                                            <td>{{ $sale->date }}</td>
+                                            <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <div class="mt-12">
+                                <canvas id="dailyExpensesChart" width="300" height="300"></canvas>
+                            </div>
                         </div>
-                    </div>
-                </div>    
-                
-                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <!-- Ventas Mensuales -->
-                    <div class="form-container w-full sm:w-1/2">
-                        <h3 class="font-semibold text-lg text-pink-600">{{ __('Ventas Mensuales') }}</h3>
-                        <table class="financial-table">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Año') }}</th>
-                                    <th>{{ __('Mes') }}</th>
-                                    <th>{{ __('Ventas Totales') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($monthlySalesData as $sale)
+                    </div>    
+                    
+                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
+                        <!-- Gastos Mensuales -->
+                        <div class="form-container w-full sm:w-1/2">
+                            <h3 class="font-semibold text-lg text-pink-600">{{ __('Gastos Mensuales') }}</h3>
+                            <table class="financial-table">
+                                <thead>
                                     <tr>
-                                        <td>{{ $sale->year }}</td>
-                                        <td>{{ $sale->month }}</td>
-                                        <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
+                                        <th>{{ __('Año') }}</th>
+                                        <th>{{ __('Mes') }}</th>
+                                        <th>{{ __('Gastos Totales') }}</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="mt-12">
-                            <canvas id="monthlySalesChart" width="300" height="300"></canvas>
+                                </thead>
+                                <tbody>
+                                    @foreach ($monthlyExpensesData as $sale)
+                                        <tr>
+                                            <td>{{ $sale->year }}</td>
+                                            <td>{{ $sale->month }}</td>
+                                            <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <div class="mt-12">
+                                <canvas id="monthlyExpensesChart" width="300" height="300"></canvas>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Ventas Anuales -->
-                    <div class="form-container w-full sm:w-1/2">
-                        <h3 class="font-semibold text-lg text-pink-600">{{ __('Ventas Anuales') }}</h3>
-                        <table class="financial-table">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Año') }}</th>
-                                    <th>{{ __('Ventas Totales') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($yearlySalesData as $sale)
+                        <!-- Gastos Anuales -->
+                        <div class="form-container w-full sm:w-1/2">
+                            <h3 class="font-semibold text-lg text-pink-600">{{ __('Gastos Anuales') }}</h3>
+                            <table class="financial-table">
+                                <thead>
                                     <tr>
-                                        <td>{{ $sale->year }}</td>
-                                        <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
+                                        <th>{{ __('Año') }}</th>
+                                        <th>{{ __('Gastos Totales') }}</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="mt-12">
-                            <canvas id="yearlySalesChart" width="300" height="300"></canvas>
+                                </thead>
+                                <tbody>
+                                    @foreach ($yearlyExpensesData as $sale)
+                                        <tr>
+                                            <td>{{ $sale->year }}</td>
+                                            <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <div class="mt-12">
+                                <canvas id="yearlyExpensesChart" width="300" height="300"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,14 +129,14 @@
     </div>
 
     <!-- Scripts JSON con Datos -->
-    <script id="dailySalesData" type="application/json">
-        @json($dailySalesData)
+    <script id="dailyExpensesData" type="application/json">
+        @json($dailyExpensesData)
     </script>
-    <script id="monthlySalesData" type="application/json">
-        @json($monthlySalesData)
+    <script id="monthlyExpensesData" type="application/json">
+        @json($monthlyExpensesData)
     </script>
-    <script id="yearlySalesData" type="application/json">
-        @json($yearlySalesData)
+    <script id="yearlyExpensesData" type="application/json">
+        @json($yearlyExpensesData)
     </script>
 
 </x-app-layout>
