@@ -90,82 +90,99 @@ function closeModal() {
         });
     }
 
-// Ejecutar la función para crear y actualizar el gráfico después de que el DOM esté completamente cargado
-//document.addEventListener('DOMContentLoaded', createAndUpdateChart);
-
 //reporte sales 
-
 
 function createReportSalesCharts() {
     var ctxDaily = document.getElementById('dailySalesChart').getContext('2d');
     var ctxMonthly = document.getElementById('monthlySalesChart').getContext('2d');
     var ctxYearly = document.getElementById('yearlySalesChart').getContext('2d');
-    /*
-    var ctxTotalRevenue = document.getElementById('totalRevenueChart').getContext('2d');
-    var ctxExpenses = document.getElementById('totalExpensesChart').getContext('2d');
-    var ctxnetProfit = document.getElementById('netProfitChart').getContext('2d');
-    */
+
     // Obtener los datos de ventas desde los scripts JSON
     const dailySalesData = JSON.parse(document.getElementById('dailySalesData').textContent);
     const monthlySalesData = JSON.parse(document.getElementById('monthlySalesData').textContent);
     const yearlySalesData = JSON.parse(document.getElementById('yearlySalesData').textContent);
-/*
-    // Obtener los datos de ventas desde los scripts JSON
-    const totalRevenue = JSON.parse(document.getElementById('totalRevenueData').textContent);
-    const totalExpenses = JSON.parse(document.getElementById('totalExpensesData').textContent);
-    const netProfit = JSON.parse(document.getElementById('netProfitData').textContent)
-*/
-    // Imprime los datos en la consola
-    /*
-    console.log('Daily Sales Data:', dailySalesData);
-    console.log('Monthly Sales Data:', monthlySalesData);
-    console.log('Yearly Sales Data:', yearlySalesData);
-    */
 
     // Transformar los datos para los gráficos
     const dailyLabels = dailySalesData.map(data => data.date);
     const dailyValues = dailySalesData.map(data => parseFloat(data.total));
-
+    const dailyTotalEggs = dailySalesData.map(data => parseFloat(data.total_eggs)); // Total Huevos
 
     const monthlyLabels = monthlySalesData.map(data => `${data.year}-${data.month}`);
     const monthlyValues = monthlySalesData.map(data => parseFloat(data.total)); // Asumiendo el formato correcto
-
+    const monthlyTotalEggs = monthlySalesData.map(data => parseFloat(data.total_eggs)); // Total Huevos
 
     const yearlyLabels = yearlySalesData.map(data => data.year); // Asumiendo el formato correcto
     const yearlyValues = yearlySalesData.map(data => parseFloat(data.total)); // Asumiendo el formato correcto
+    const yearlyTotalEggs = yearlySalesData.map(data => parseFloat(data.total_eggs)); // Total Huevos
+
 
     // Configuración de los gráficos
     var dailyChartData = {
         labels: dailyLabels,
-        datasets: [{
-            label: 'Ventas Diarias',
-            data: dailyValues,
-            backgroundColor: '#4caf50',
-            borderColor: '#388e3c',
-            borderWidth: 1
-        }]
+        datasets: [
+            {
+                label: 'Total Huevos',
+                data: dailyTotalEggs,
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1,
+                fill: false,
+                type: 'line'  // Esta línea será un gráfico de línea
+            },
+            {
+                label: 'Ventas Diarias',
+                data: dailyValues,
+                backgroundColor: '#4caf50',
+                borderColor: '#388e3c',
+                borderWidth: 1,
+                fill: false,
+                type: 'line'  // Esta línea también será un gráfico de línea
+            }
+        ]
     };
 
     var monthlyChartData = {
         labels: monthlyLabels,
-        datasets: [{
-            label: 'Ventas Mensuales',
-            data: monthlyValues,
-            backgroundColor: ['#4caf50', '#f44336', '#2196f3'],
-            borderColor: ['#388e3c', '#d32f2f', '#1976d2'],
-            borderWidth: 1
-        }]
+        datasets: [
+            {
+                label: 'Total Huevos',
+                data: monthlyTotalEggs,
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1,
+                fill: false,
+                type: 'line'  // Esta línea será un gráfico de línea
+            },
+            {
+                label: 'Ventas Mensuales',
+                data: monthlyValues,
+                backgroundColor: ['#4caf50', '#f44336', '#2196f3'],
+                borderColor: ['#388e3c', '#d32f2f', '#1976d2'],
+                borderWidth: 1
+            }
+        ]
     };
 
     var yearlyChartData = {
         labels: yearlyLabels,
-        datasets: [{
-            label: 'Ventas Anuales',
-            data: yearlyValues,
-            backgroundColor: '#2196f3',
-            borderColor: '#1976d2',
-            borderWidth: 1
-        }]
+        datasets: [
+            {
+                label: 'Total Huevos',
+                data: yearlyTotalEggs,
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1,
+                fill: false,
+                type: 'line'  // Esta línea será un gráfico de línea
+            },
+            {
+                label: 'Ventas Anuales',
+                data: yearlyValues,
+                backgroundColor: '#2196f3',
+                borderColor: '#1976d2',
+                borderWidth: 1
+            }
+        ]
     };
 
     var chartOptions = {
@@ -197,9 +214,6 @@ function createReportSalesCharts() {
         options: chartOptions
     });
 }
-
-// Ejecutar la función para crear y actualizar los gráficos después de que el DOM esté completamente cargado
-//document.addEventListener('DOMContentLoaded', createReportSalesCharts);
 
 //fin reporte sales 
 
@@ -307,10 +321,10 @@ function creatReportProductionCharts() {
         data: {
             labels: categoryData.map(d => d.category),
             datasets: [{
-                label: 'Producción x Categoria mensual o segun rango de fecha',
+                label: 'Producción x Categoria Mensual-Fecha',
                 data: categoryData.map(d => d.total),
-                backgroundColor: ['#673AB7', '#d32f2f', '#1976d2', '#ff5722'],
-                borderColor: ['#673AB7', '#d32f2f', '#1976d2','#ff5722'],
+                backgroundColor: ['#673AB7', '#d32f2f', '#1976d2', '#ff5722','#4caf50'],
+                borderColor: ['#673AB7', '#d32f2f', '#1976d2','#ff5722','#4caf50'],
                 borderWidth: 2, // Ancho del borde
                 fill: true, // No rellenar el área debajo de la línea
             }]
@@ -329,7 +343,6 @@ function creatReportProductionCharts() {
     });
 };
 
-//document.addEventListener('DOMContentLoaded', );
 //fin reporte produccion  
 
 //Reporte Gastos
@@ -355,9 +368,9 @@ function createReportExpensesCharts() {
             data: {
                 labels: dailyData.map(d => d.date),
                 datasets: [{
-                    label: 'Producción Diaria',
+                    label: 'Gastos Diarios',
                     data: dailyData.map(d => d.total),
-                    borderColor: 'rgba(255, 99, 132, 1)', // Rosa
+                    borderColor: '#0097A7', // Rosa
                     backgroundColor: '#4caf50', 
                     borderWidth: 2, // Ancho del borde
                     fill: true, // No rellenar el área debajo de la línea
@@ -382,9 +395,9 @@ function createReportExpensesCharts() {
             data: {
                 labels: monthlyData.map(d => `${d.month}/${d.year}`),
                 datasets: [{
-                    label: 'Producción Mensual',
+                    label: 'Gastos Mensuales',
                     data: monthlyData.map(d => d.total),
-                    borderColor: 'rgba(255, 99, 132, 1)', // Rosa
+                    //borderColor: 'rgba(255, 99, 132, 1)', // Rosa
                     backgroundColor: '#0097A7', 
                     borderWidth: 2, // Ancho del borde
                     fill: true, // No rellenar el área debajo de la línea
@@ -405,13 +418,13 @@ function createReportExpensesCharts() {
         });
     
         const yearlyChart = new Chart(ctxYearlyExpenses, {
-            type: 'line', // Tipo inicial del gráfico
+            type: 'bar', // Tipo inicial del gráfico
             data: {
                 labels: yearlyData.map(d => d.year),
                 datasets: [{
-                    label: 'Producción Anual',
+                    label: 'Gastos Anuales',
                     data: yearlyData.map(d => d.total),
-                    borderColor: 'rgba(255, 99, 132, 1)', // Rosa
+                    //borderColor: 'rgba(255, 99, 132, 1)', // Rosa
                     backgroundColor: '#2196f3', 
                     borderWidth: 2, // Ancho del borde
                     fill: true, // No rellenar el área debajo de la línea

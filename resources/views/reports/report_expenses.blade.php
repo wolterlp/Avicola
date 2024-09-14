@@ -22,15 +22,15 @@
                 <!-- Sección del formulario de reportes -->
                 <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
                     <div class="form-container w-full p-6 ">
-                        <form method="GET" action="{{ route('report.reportSales') }}" class="form-wrapper">
+                        <form method="GET" action="{{ route('report.reportExpenses') }}" class="form-wrapper">
                             @csrf    
                             <div class="flex flex-col mb-4">
                                 <label for="start_date" class="text-pink-500 font-semibold"> {{ __('Fecha de Inicio') }}:</label>
-                                <input type="date" id="start_date" name="start_date" class="form-input" required>
+                                <input type="date" id="start_date" name="start_date" class="form-input" value="{{ request('start_date') }}" required>
                             </div>
                             <div class="flex flex-col mb-4">
                                 <label for="end_date" class="text-pink-500 font-semibold"> {{ __('Fecha de Fin') }}:</label>
-                                <input type="date" id="end_date" name="end_date" class="form-input" required>
+                                <input type="date" id="end_date" name="end_date" class="form-input" value="{{ request('end_date') }}"  required>
                             </div>
                             <div class="flex justify-center">
                                 <button type="submit" class="form-button">
@@ -45,8 +45,7 @@
                 </div>
 
                 <!-- Sección de resumen financiero y gráficos -->
-                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4"-->
-                        <!-- Sección de Gastos diarias, mensuales y anuales -->
+                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4"-->                        
                         <!-- Gastos Diarias -->
                         <div class="form-container w-full mx-auto">
                             <h3 class="font-semibold text-lg text-pink-600">{{ __('Gastos Diarias') }}</h3>
@@ -58,21 +57,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($dailyExpensesData as $sale)
+                                    @foreach ($dailyExpensesPaginadoData as $expenses)
                                         <tr>
-                                            <td>{{ $sale->date }}</td>
-                                            <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
+                                            <td>{{ $expenses->date }}</td>
+                                            <td>$ {{ number_format($expenses->total, 2, ',', '.') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <div class="mt-2">
+                                    {{ $dailyExpensesPaginadoData
+                                    ->appends(['start_date' => request('start_date'), 'end_date' => request('end_date')])
+                                    ->links('', ['paginator' => $dailyExpensesPaginadoData]) }}
+                                </div>
                             </table>
                             <div class="mt-12">
                                 <canvas id="dailyExpensesChart" width="300" height="300"></canvas>
                             </div>
-                        </div>
+                        </div>                        
                     </div>    
                     
-                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">                        
                         <!-- Gastos Mensuales -->
                         <div class="form-container w-full sm:w-1/2">
                             <h3 class="font-semibold text-lg text-pink-600">{{ __('Gastos Mensuales') }}</h3>
@@ -85,14 +89,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($monthlyExpensesData as $sale)
+                                    @foreach ($monthlyExpensesPaginadoData as $expenses)
                                         <tr>
-                                            <td>{{ $sale->year }}</td>
-                                            <td>{{ $sale->month }}</td>
-                                            <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
+                                            <td>{{ $expenses->year }}</td>
+                                            <td>{{ $expenses->month }}</td>
+                                            <td>$ {{ number_format($expenses->total, 2, ',', '.') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <div class="mt-2">
+                                    {{ $monthlyExpensesPaginadoData
+                                    ->appends(['start_date' => request('start_date'), 'end_date' => request('end_date')])
+                                    ->links('', ['paginator' => $monthlyExpensesPaginadoData]) }}
+                                </div>
                             </table>
                             <div class="mt-12">
                                 <canvas id="monthlyExpensesChart" width="300" height="300"></canvas>
@@ -110,18 +119,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($yearlyExpensesData as $sale)
+                                    @foreach ($yearlyExpensesPaginadoData as $expenses)
                                         <tr>
-                                            <td>{{ $sale->year }}</td>
-                                            <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
+                                            <td>{{ $expenses->year }}</td>
+                                            <td>$ {{ number_format($expenses->total, 2, ',', '.') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <div class="mt-2">
+                                    {{ $yearlyExpensesPaginadoData
+                                    ->appends(['start_date' => request('start_date'), 'end_date' => request('end_date')])
+                                    ->links('', ['paginator' => $yearlyExpensesPaginadoData]) }}
+                                </div>
                             </table>
                             <div class="mt-12">
                                 <canvas id="yearlyExpensesChart" width="300" height="300"></canvas>
                             </div>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             </div>

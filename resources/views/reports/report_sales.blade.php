@@ -45,82 +45,105 @@
                 </div>
 
                 <!-- Sección de resumen financiero y gráficos -->
-               
-                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4"-->
-                        <!-- Ventas Diarias -->
-                        <div class="form-container w-full mx-auto">
-                    
-                            <h3 class="font-semibold text-lg text-pink-600">{{ __('Ventas Diarias') }}</h3>
-                            <table class="financial-table">
-                                <thead>
+                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4"-->
+                    <!-- Ventas Diarias -->
+                    <div class="form-container w-full mx-auto">
+                        <h3 class="font-semibold text-lg text-pink-600">{{ __('Ventas Diarias') }}</h3>
+                        <table class="financial-table">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('Fecha') }}</th>
+                                    <th>{{ __('Categoría') }}</th>
+                                    <th>{{ __('Total Huevos') }}</th>
+                                    <th>{{ __('Ventas Totales') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($dailyPaginadoSalesData as $sale)
                                     <tr>
-                                        <th>{{ __('Fecha') }}</th>
-                                        <th>{{ __('Ventas Totales') }}</th>
+                                        <td>{{ $sale->date }}</td>
+                                        <td>{{ $sale->category }}</td>
+                                        <td>{{ $sale->total_eggs }}</td>
+                                        <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($dailySalesData as $sale)
-                                        <tr>
-                                            <td>{{ $sale->date }}</td>
-                                            <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <div class="mt-12">
-                                <canvas id="dailySalesChart" width="300" height="300" ></canvas>
-                            </div>
-                        </div>
-                    </div>    
-
-                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
-                        <!-- Ventas Mensuales -->
-                        <div class="form-container w-full sm:w-1/2 max-w-4xl mx-auto">
-                            <h3 class="font-semibold text-lg text-pink-600">{{ __('Ventas Mensuales') }}</h3>
-                            <table class="financial-table">
-                                <thead>
-                                    <tr>
-                                        <th>{{ __('Año') }}</th>
-                                        <th>{{ __('Mes') }}</th>
-                                        <th>{{ __('Ventas Totales') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($monthlySalesData as $sale)
-                                        <tr>
-                                            <td>{{ $sale->year }}</td>
-                                            <td>{{ $sale->month }}</td>
-                                            <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                @endforeach
+                            </tbody>
                             <div>
-                                <canvas id="monthlySalesChart"></canvas>
+                                {{ $dailyPaginadoSalesData
+                                    ->appends(['start_date' => request('start_date'), 'end_date' => request('end_date')])
+                                    ->links('', ['paginator' => $dailyPaginadoSalesData]) }}         
                             </div>
+                        </table>
+                        <div class="mt-12">
+                            <canvas id="dailySalesChart" width="300" height="300" ></canvas>
                         </div>
+                    </div>
+                </div>    
 
-                        <!-- Ventas Anuales -->
-                        <div class="form-container w-full sm:w-1/2  mx-auto">
-                            <h3 class="font-semibold text-lg text-pink-600">{{ __('Ventas Anuales') }}</h3>
-                            <table class="financial-table">
-                                <thead>
+                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <!-- Ventas Mensuales -->
+                    <div class="form-container w-full sm:w-1/2 max-w-4xl mx-auto">
+                    <!--div class="form-container w-full mx-auto relative min-h-[300px] max-h-[1000px] overflow-y-auto transition-all"-->    
+                        
+                        <h3 class="font-semibold text-lg text-pink-600">{{ __('Ventas Mensuales') }}</h3>
+                        <table class="financial-table">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('Año') }}</th>
+                                    <th>{{ __('Mes') }}</th>
+                                    <th>{{ __('Total Huevos') }}</th>
+                                    <th>{{ __('Ventas Totales') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($monthlyPaginadoSalesData as $sale)
                                     <tr>
-                                        <th>{{ __('Año') }}</th>
-                                        <th>{{ __('Ventas Totales') }}</th>
+                                        <td>{{ $sale->year }}</td>
+                                        <td>{{ $sale->month }}</td>
+                                        <td>{{ $sale->total_eggs }}</td>
+                                        <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($yearlySalesData as $sale)
-                                        <tr>
-                                            <td>{{ $sale->year }}</td>
-                                            <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <div>
-                                <canvas id="yearlySalesChart"></canvas>
+                                @endforeach
+                            </tbody>
+                            <div class="mt-2">
+                                {{ $monthlyPaginadoSalesData
+                                    ->appends(['start_date' => request('start_date'), 'end_date' => request('end_date')])
+                                    ->links('', ['paginator' => $monthlyPaginadoSalesData]) }}
+                            </div>
+                        </table>
+                        <div>
+                            <canvas id="monthlySalesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Ventas Anuales -->
+                    <div class="form-container w-full sm:w-1/2  mx-auto">
+                        <h3 class="font-semibold text-lg text-pink-600">{{ __('Ventas Anuales') }}</h3>
+                        <table class="financial-table">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('Año') }}</th>
+                                    <th>{{ __('Total Huevos') }}</th>
+                                    <th>{{ __('Ventas Totales') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($yearlyPaginadoSalesData as $sale)
+                                    <tr>
+                                        <td>{{ $sale->year }}</td>
+                                        <td>{{ $sale->total_eggs }}</td>
+                                        <td>$ {{ number_format($sale->total, 2, ',', '.') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <div class="mt-2">
+                                {{ $yearlyPaginadoSalesData
+                                    ->appends(['start_date' => request('start_date'), 'end_date' => request('end_date')])
+                                    ->links('', ['paginator' => $yearlyPaginadoSalesData]) }}
+                            </div>
+                        </table>
+                        <div>
+                            <canvas id="yearlySalesChart"></canvas>
                             </div>
                         </div>
                     </div>

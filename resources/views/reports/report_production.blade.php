@@ -49,7 +49,6 @@
                     <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
                         <!-- Producción Diaria -->
                         <div class="form-container w-full sm:w-1/2">
-                            
                             <h3 class="font-semibold text-lg text-pink-600">{{ __('Producción Diaria') }}</h3>
                             <table class="financial-table">
                                 <thead>
@@ -59,13 +58,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($dailyProductionData as $production)
+                                    @foreach ($dailyProductionPaginadoData as $production)
                                         <tr>
                                             <td>{{ $production->date }}</td>
                                             <td>{{ $production->total }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <div class="mt-2">
+                                    {{ $dailyProductionPaginadoData
+                                    ->appends(['start_date' => request('start_date'), 'end_date' => request('end_date')])
+                                    ->Links() }}
+                                </div>
                             </table>
                             <div class="mt-12">
                                 <canvas id="dailyProductionChart" width="300" height="300"></canvas>
@@ -83,7 +87,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($monthlyProductionData as $production)
+                                    @foreach ($monthlyProductionPaginadoData as $production)
                                         <tr>
                                             <td>{{ $production->year }}</td>
                                             <td>{{ $production->month }}</td>
@@ -91,13 +95,17 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <div class="mt-2">
+                                    {{ $monthlyProductionPaginadoData
+                                    ->appends(['start_date' => request('start_date'), 'end_date' => request('end_date')])
+                                    ->links('', ['paginator' => $monthlyProductionPaginadoData]) }}
+                                </div>
                             </table>
                             <div class="mt-12">
                                 <canvas id="monthlyProductionChart" width="300" height="300"></canvas>
                             </div>
                         </div>
                     </div>
-
                     <!-- Producción Anual -->
                     <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
                         <div class="form-container w-full sm:w-1/2">
@@ -110,13 +118,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($yearlyProductionData as $production)
+                                    @foreach ($yearlyProductionPaginadoData as $production)
                                         <tr>
                                             <td>{{ $production->year }}</td>
                                             <td>{{ $production->total }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <div class="mt-2">
+                                    {{ $yearlyProductionPaginadoData
+                                    ->appends(['start_date' => request('start_date'), 'end_date' => request('end_date')])
+                                    ->links('', ['paginator' => $yearlyProductionPaginadoData]) }}
+                                </div>
                             </table>
                             <div class="mt-12">
                                 <canvas id="yearlyProductionChart" width="300" height="300"></canvas>

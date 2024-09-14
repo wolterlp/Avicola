@@ -39,17 +39,10 @@ class SaleController extends Controller
 
         // realizamos la consulta
         $sales = Sale::with('eggCategory', 'user') 
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->orderBy('created_at', 'desc')
-        ->paginate(6); // 10 ventas por página
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->orderBy('created_at', 'desc')
+            ->simplePaginate(6); // 10 ventas por página
 
-
-/*
-
-        $sales = Sale::with('eggCategory', 'user')
-        ->orderBy('created_at', 'desc')
-        ->paginate(10); // 10 ventas por página
-      */ 
         return view('sales.history', compact('sales', 'fec_ini', 'fec_fin'));
     }
 
@@ -149,8 +142,6 @@ class SaleController extends Controller
         // Ver la consulta SQL
         $sql = Sale::whereBetween('created_at', [$validated['start_date'], $validated['end_date']])
         ->toSql();
-
-        dd($sql);                    
         */
         
         return view('sales.revenue', [

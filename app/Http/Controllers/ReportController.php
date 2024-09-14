@@ -79,7 +79,7 @@ class ReportController extends Controller
         // Calcular los ingresos totales
         $totalRevenue = Sale::whereBetween('created_at', [$startDate, $endDate])
                             ->sum('total_price');
-    
+                            
         // Calcular los gastos totales
         $totalExpenses = Expense::whereBetween('expense_date', [$startDate, $endDate])
                                 ->sum('amount');
@@ -88,32 +88,70 @@ class ReportController extends Controller
         $netProfit = $totalRevenue - $totalExpenses;
     
         // Obtener los datos para los gráficos
-        $dailySalesData = Sale::selectRaw('DATE(created_at) as date, SUM(total_price) as total')
-                               ->whereBetween('created_at', [$startDate, $endDate])
-                               ->groupBy('date')
-                               ->orderBy('date')
-                               ->get();
+        $dailySalesData = 
+        Sale::selectRaw('DATE(sales.created_at) as date, egg_categories.category, SUM(sales.quantity) as total_eggs, SUM(sales.total_price) as total')
+            ->join('egg_categories', 'sales.egg_category_id', '=', 'egg_categories.id')
+            ->whereBetween('sales.created_at', [$startDate, $endDate])
+            ->groupBy('date', 'egg_categories.category')
+            ->orderBy('date')
+            ->get();
 
-        $monthlySalesData = Sale::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(total_price) as total')
-                                 ->whereBetween('created_at', [$startDate->startOfYear(), $endDate->endOfYear()])
-                                 ->groupBy('year', 'month')
-                                 ->orderBy('year')
-                                 ->orderBy('month')
-                                 ->get();
-    
-        $yearlySalesData = Sale::selectRaw('YEAR(created_at) as year, SUM(total_price) as total')
-                               ->whereBetween('created_at', [$startDate->startOfDecade(), $endDate->endOfDecade()])
-                               ->groupBy('year')
-                               ->orderBy('year')
-                               ->get();
+        $dailyPaginadoSalesData = 
+        Sale::selectRaw('DATE(sales.created_at) as date, egg_categories.category, SUM(sales.quantity) as total_eggs, SUM(sales.total_price) as total')
+            ->join('egg_categories', 'sales.egg_category_id', '=', 'egg_categories.id')
+            ->whereBetween('sales.created_at', [$startDate, $endDate])
+            ->groupBy('date', 'egg_categories.category')
+            ->orderBy('date', 'ASC')
+            ->simplePaginate(5, ['*'], 'dailyPage');
+
+        $monthlySalesData = 
+            Sale::selectRaw('YEAR(sales.created_at) as year, MONTH(sales.created_at) as month, SUM(sales.quantity) as total_eggs, SUM(sales.total_price) as total')
+            ->whereBetween('sales.created_at', [$startDate->startOfYear(), $endDate->endOfYear()])
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'ASC')
+            ->orderBy('month', 'ASC')
+            ->get();
+
+        $monthlyPaginadoSalesData = 
+            Sale::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(quantity) as total_eggs, SUM(sales.total_price) as total')
+            ->whereBetween('created_at', [$startDate->startOfYear(), $endDate->endOfYear()])
+            ->groupBy('year', 'month')
+            ->orderBy('year')
+            ->orderBy('month')
+            ->simplePaginate(5, ['*'], 'monthlyPage');
+
+        $yearlySalesData = Sale::selectRaw('YEAR(created_at) as year, SUM(quantity) as total_eggs, SUM(sales.total_price) as total')
+            ->whereBetween('created_at', [$startDate->startOfDecade(), $endDate->endOfDecade()])
+            ->groupBy('year')
+            ->orderBy('year')
+            ->get();
+
+        $yearlyPaginadoSalesData = Sale::selectRaw('YEAR(created_at) as year, SUM(quantity) as total_eggs, SUM(sales.total_price) as total')
+            ->whereBetween('created_at', [$startDate->startOfDecade(), $endDate->endOfDecade()])
+            ->groupBy('year')
+            ->orderBy('year')
+            ->simplePaginate(5, ['*'], 'yearlyPage');
 
         // Devolver una vista con los resultados
-        return view('reports.report_sales', compact('totalRevenue', 'totalExpenses', 'netProfit', 'fec_ini', 'fec_fin', 'dailySalesData', 'monthlySalesData', 'yearlySalesData'));
+        return view('reports.report_sales', compact(
+            'totalRevenue', 
+            'totalExpenses', 
+            'netProfit', 
+            'fec_ini', 
+            'fec_fin', 
+            'dailyPaginadoSalesData',
+            'dailySalesData', 
+            'monthlyPaginadoSalesData',
+            'monthlySalesData', 
+            'yearlyPaginadoSalesData',
+            'yearlySalesData'));
+            
       
     }
     
     public function reportProduction(Request $request)
     {
+       
         // Validar las fechas recibidas
         $validated = $request->validate([
             'start_date' => 'nullable|date',
@@ -129,15 +167,25 @@ class ReportController extends Controller
             $startDate = Carbon::parse($validated['start_date'])->startOfDay();
             $endDate = Carbon::parse($validated['end_date'])->endOfDay();
         }
-
-        $fec_ini = $startDate ->format('d-m-Y');
-        $fec_fin = $endDate ->format('d-m-Y');
-    
+   
         // Calcular la producción total de huevos
         $totalProduction = DB::table('egg_productions')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('quantity');
     
+        $productionByCategory = EggProduction::select(
+                'egg_categories.category as category',
+                DB::raw('SUM(egg_productions.quantity) as total')
+            )
+            ->join('egg_categories', 'egg_productions.egg_category_id', '=', 'egg_categories.id')
+            ->whereBetween('egg_productions.created_at',  [$startDate, $endDate])
+            ->groupBy('egg_categories.category', 'egg_productions.egg_category_id')
+            ->orderBy('egg_productions.egg_category_id', 'ASC')
+            ->get();
+
+        $fec_ini = $startDate ->format('d-m-Y');
+        $fec_fin = $endDate ->format('d-m-Y');
+
         // Obtener los datos para los gráficos
         $dailyProductionData = DB::table('egg_productions')
             ->selectRaw('DATE(created_at) as date, SUM(quantity) as total')
@@ -146,6 +194,13 @@ class ReportController extends Controller
             ->orderBy('date')
             ->get();
     
+        $dailyProductionPaginadoData = DB::table('egg_productions')
+            ->selectRaw('DATE(created_at) as date, SUM(quantity) as total')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->simplePaginate(5, ['*'], 'dailyPage');//->paginate( 5); // Cambia el número a la cantidad de resultados por página que desees
+           
         $monthlyProductionData = DB::table('egg_productions')
             ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(quantity) as total')
             ->whereBetween('created_at', [$startDate->startOfYear(), $endDate->endOfYear()])
@@ -153,30 +208,40 @@ class ReportController extends Controller
             ->orderBy('year')
             ->orderBy('month')
             ->get();
-    
+
+        $monthlyProductionPaginadoData = DB::table('egg_productions')
+            ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(quantity) as total')
+            ->whereBetween('created_at', [$startDate->startOfYear(), $endDate->endOfYear()])
+            ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
+            ->orderBy('year')
+            ->orderBy('month')
+            ->simplePaginate(5, ['*'], 'monthlyPage'); // Cambia el número a la cantidad de resultados por página que desees
+ 
+        $yearlyProductionPaginadoData = DB::table('egg_productions')
+            ->selectRaw('YEAR(created_at) as year, SUM(quantity) as total')
+            ->whereBetween('created_at', [$startDate->startOfDecade(), $endDate->endOfDecade()])
+            ->groupBy(DB::raw('YEAR(created_at)'))
+            ->orderBy('year')
+            ->simplePaginate(5, ['*'], 'yearlyPage'); // Cambia el número a la cantidad de resultados por página que desees
+           
         $yearlyProductionData = DB::table('egg_productions')
             ->selectRaw('YEAR(created_at) as year, SUM(quantity) as total')
             ->whereBetween('created_at', [$startDate->startOfDecade(), $endDate->endOfDecade()])
             ->groupBy(DB::raw('YEAR(created_at)'))
             ->orderBy('year')
             ->get();
-    
-        // Obtener la producción por categoría
-        $productionByCategory = DB::table('egg_productions')
-            ->join('egg_categories', 'egg_productions.egg_category_id', '=', 'egg_categories.id')
-            ->select('egg_categories.category as category', DB::raw('SUM(egg_productions.quantity) as total'))
-            ->whereBetween('egg_productions.created_at', [$startDate, $endDate])
-            ->groupBy('egg_categories.category')
-            ->get();
-    
+
         // Devolver una vista con los resultados
         return view('reports.report_production', compact(
             'totalProduction', 
             'fec_ini', 
             'fec_fin', 
-            'dailyProductionData', 
-            'monthlyProductionData', 
-            'yearlyProductionData', 
+            'dailyProductionData',
+            'dailyProductionPaginadoData', 
+            'monthlyProductionData',
+            'monthlyProductionPaginadoData', 
+            'yearlyProductionData',
+            'yearlyProductionPaginadoData', 
             'productionByCategory'
         ));
     }
@@ -208,14 +273,29 @@ class ReportController extends Controller
             ->sum('amount');
     
         // Obtener los datos para los gráficos diarios
+        $dailyExpensesPaginadoData = DB::table('expenses')
+            ->selectRaw('DATE(created_at) as date, SUM(amount) as total')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->simplePaginate(5, ['*'], 'dailyPage');// Cambia el número a la cantidad de resultados por página que desees
+
         $dailyExpensesData = DB::table('expenses')
             ->selectRaw('DATE(created_at) as date, SUM(amount) as total')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date')
             ->get();
-    
+
         // Obtener los datos para los gráficos mensuales
+        $monthlyExpensesPaginadoData = DB::table('expenses')
+            ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(amount) as total')
+            ->whereBetween('created_at', [$startDate->startOfYear(), $endDate->endOfYear()])
+            ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'))
+            ->orderBy('year')
+            ->orderBy('month')
+            ->simplePaginate(5, ['*'], 'monthlyPage'); // Cambia el número a la cantidad de resultados por página que desees
+
         $monthlyExpensesData = DB::table('expenses')
             ->selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, SUM(amount) as total')
             ->whereBetween('created_at', [$startDate->startOfYear(), $endDate->endOfYear()])
@@ -223,8 +303,15 @@ class ReportController extends Controller
             ->orderBy('year')
             ->orderBy('month')
             ->get();
-    
+
         // Obtener los datos para los gráficos anuales
+        $yearlyExpensesPaginadoData = DB::table('expenses')
+            ->selectRaw('YEAR(created_at) as year, SUM(amount) as total')
+            ->whereBetween('created_at', [$startDate->startOfDecade(), $endDate->endOfDecade()])
+            ->groupBy(DB::raw('YEAR(created_at)'))
+            ->orderBy('year')
+            ->simplePaginate(5, ['*'], 'yearlyPage'); // Cambia el número a la cantidad de resultados por página que desees
+
         $yearlyExpensesData = DB::table('expenses')
             ->selectRaw('YEAR(created_at) as year, SUM(amount) as total')
             ->whereBetween('created_at', [$startDate->startOfDecade(), $endDate->endOfDecade()])
@@ -237,11 +324,12 @@ class ReportController extends Controller
             'totalExpenses', 
             'fec_ini', 
             'fec_fin', 
-            'dailyExpensesData', 
+            'dailyExpensesData',
+            'dailyExpensesPaginadoData', 
             'monthlyExpensesData', 
-            'yearlyExpensesData'
+            'monthlyExpensesPaginadoData', 
+            'yearlyExpensesData',
+            'yearlyExpensesPaginadoData'
         ));
     }
-    
-    
 }
