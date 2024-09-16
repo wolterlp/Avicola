@@ -22,10 +22,10 @@ class SaleController extends Controller
             'end_date' => 'nullable|date',
         ]);
         
-        // Si no se proporcionan fechas, usa un rango predeterminado (el mes actual)
+        // Si no se proporcionan fechas, usa un rango predeterminado (del dia actual)
         if (empty($validated['start_date']) || empty($validated['end_date'])) {
-            $startDate = Carbon::now()->startOfMonth();
-            $endDate = Carbon::now()->endOfMonth();
+            $startDate = Carbon::now()->startOfDay();
+            $endDate = Carbon::now()->endOfDay();
         } else {
             // Formatear las fechas proporcionadas para considerar todo el día
             $startDate = Carbon::parse($validated['start_date'])->startOfDay();
@@ -46,14 +46,62 @@ class SaleController extends Controller
         return view('sales.history', compact('sales', 'fec_ini', 'fec_fin'));
     }
 
+    public function editSale(Sale $sale)
+    {
+
+        $eggCategories = EggCategory::all();
+
+        return view('sales.edit',['sale' => $sale], compact('eggCategories'));
+    }
+
     public function create()
     {
         $eggCategories = EggCategory::all();
-        return view('sales.create', compact('eggCategories'));
+        return view('sales/create', compact('eggCategories'));
+    }
+
+    
+
+    public function update(Request $request,Sale $sale)
+    {
+        $validated = $request->validate([
+            'egg_category_id' => 'required|exists:egg_categories,id',
+            'quantity' => 'required|integer|min:1',
+            'price_per_unit' => 'required|numeric|min:0.01',
+        ]);
+
+        $currentDate = Carbon::today(); // Fecha actual para buscar solo del dia de hoy
+
+        $eggInventory = EggInventory::where('egg_category_id', $sale->egg_category_id)
+            ->where('user_id', $sale->user_id)
+            ->where('related_id', $sale->id)
+            ->where('transaction_type', 'sale')
+            ->whereDate('created_at', $currentDate)
+            ->first();
+
+        if ($eggInventory) {
+            // actualizamos la venta
+            $sale->update($validated);
+
+            // Actualizar el inventario existente
+            $eggInventory->update([
+                'quantity' => $sale->quantity, // Actualiza la cantidad en inventario con el valor de la venta
+            ]);
+
+            return to_route('sales.history')->with('status', __('Sale update successfully!'));
+
+        } else{
+            return redirect()->back()->with('error', __('Solo puede actualizar ventas del día!'));
+   
+        }
+
+        
     }
 
     public function store(Request $request)
     {
+   
+        
         $request->validate([
             'egg_category_id' => 'required|exists:egg_categories,id',
             'quantity' => 'required|integer|min:1',
@@ -68,7 +116,7 @@ class SaleController extends Controller
             'user_id' => auth()->id(), // ID del usuario autenticado
             'quantity' => $request->input('quantity'),
             'price_per_unit' => $request->input('price_per_unit'),
-            'total_price' => $request->input('quantity') * $request->input('price_per_unit'),
+            'total_price' => $totalPrice
         ]);
 
         
@@ -87,7 +135,7 @@ class SaleController extends Controller
                 'related_id' => $sale->id,
                 'user_id' => auth()->id(),
                 'transaction_date' => $transactionDate,
-            ]);
+            ]);            
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al registrar en el inventario: ' . $e->getMessage());
         }

@@ -20,7 +20,7 @@
         <div class="max-w-7x1 mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"> 
                 <!-- Sección del formulario de reportes -->
-                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
+                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center gap-4">
                     <div class="form-container w-full p-6 ">
                         <form method="GET" action="{{ route('report.reportExpenses') }}" class="form-wrapper">
                             @csrf    
@@ -45,7 +45,7 @@
                 </div>
 
                 <!-- Sección de resumen financiero y gráficos -->
-                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4"-->                        
+                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center gap-4"-->                        
                         <!-- Gastos Diarias -->
                         <div class="form-container w-full mx-auto">
                             <h3 class="font-semibold text-lg text-pink-600">{{ __('Gastos Diarias') }}</h3>
@@ -76,7 +76,7 @@
                         </div>                        
                     </div>    
                     
-                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">                        
+                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center gap-4">                        
                         <!-- Gastos Mensuales -->
                         <div class="form-container w-full sm:w-1/2">
                             <h3 class="font-semibold text-lg text-pink-600">{{ __('Gastos Mensuales') }}</h3>

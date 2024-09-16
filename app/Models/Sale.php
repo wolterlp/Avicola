@@ -26,4 +26,9 @@ class Sale extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function eggInventory()
+    {
+        return $this->belongsTo(EggInventory::class, 'egg_category_id', 'egg_category_id');
+    }
 }

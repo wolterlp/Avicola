@@ -1,7 +1,31 @@
 /* Estilo para el contorno del formulario */
     .form-container {
         @apply   dark:text-gray-100 border-2 border-pink-500 p-4 rounded-lg;
-        padding: 6px;
+        
+    }
+
+    .contenedor1 {
+        display: flex;
+        flex-wrap: wrap; /* Permite que los contenedores se envuelvan si no caben en una fila */
+        gap: 10px; /* Espacio entre los contenedores */
+    }
+    
+    /* Estilos para contenedor2 */
+    .contenedor2 {
+        @apply   dark:text-gray-100 border-2 border-pink-500 p-4 rounded-lg;
+        flex: 1; /* Hace que todos los contenedores2 tengan el mismo tamaño */
+        min-width: 100px; /* Ancho mínimo para evitar que los contenedores sean demasiado pequeños */
+       /* box-sizing: border-box; /* Incluye padding y border en el ancho y alto total */
+    }
+    
+    /* Estilos para contenedor3 y contenedor4 */
+    .contenedor3 {
+        min-height: 100px;
+    }
+
+    .contenedor4 {
+       /* min-width: 200px; /* Ancho mínimo para evitar que los contenedores sean demasiado pequeños */
+        min-height: 300px;
     }
 
     .form-container input {
@@ -46,71 +70,54 @@
 /* Fin Estilo Reportes*/
 
 /*Estilos Tablas*/
-    .financial-summary {
-        @apply overflow-x-auto;
-        margin-top: 1rem; /* Espaciado superior */
-        padding: 1rem; /* Espaciado interno */
-        border: 1px solid #e2e8f0; /* Borde ligero */
-        border-radius: 0.375rem; /* Esquinas redondeadas */
-        background-color: #f9fafb; /* Fondo gris claro */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    }
 
+.financial-summary {
+    @apply overflow-x-auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+.financial-table {
+    margin-top: 1rem; /* Espaciado superior */
+    width: 100%; /* Ancho completo */
+    border-collapse: collapse; /* Colapsa los bordes */
+    table-layout: auto;
+}
+
+.financial-table th, .financial-table td {
+    border: 1px solid #e2e8f0; /* Borde ligero */
+    padding: 0.4rem; /* Espaciado interno */
+    text-align: center; /* Centra el texto */
+    white-space: nowrap; /* Evita el salto de línea en el contenido */
+}
+
+.financial-table th {
+    background-color: #f3f4f6; /* Fondo de encabezado */
+    color: #1f2937; /* Color del texto */
+    font-weight: 400; /* Peso de la fuente */
+}
+
+.financial-table td {
+    background-color: #ffffff; /* Fondo blanco */
+    color: #191a1b; /* Color del texto */
+}
+
+.financial-table .total-row td {
+    font-weight: 700; /* Peso de la fuente para la fila total */
+    background-color: #f9fafb; /* Fondo gris claro */
+}
+
+/* Estilos responsivos para pantallas pequeñas */
+@media (max-width: 600px) {
     .financial-table {
-        margin-top: 1rem; /* Espaciado superior */
-        width: 100%; /* Ancho completo */
-        border-collapse: collapse; /* Colapsa los bordes */
-       /* @apply table-auto min-w-full;*/
-       /* @apply max-h-80 overflow-y-auto; */
-    }
-
-    .financial-summary a {
-        color: #ec4899;       /* Cambiar color de texto a negro */
-        font-weight: 600;   /* Cambiar el grosor de la letra */
-        display: block;     /* Para que el 'a' ocupe todo el ancho del div */
-        text-align: center; /* Centrar el contenido */
+        font-size: 14px; /* Ajusta el tamaño del texto en pantallas pequeñas */
     }
 
     .financial-table th, .financial-table td {
-        border: 1px solid #e2e8f0; /* Borde ligero */
-        padding: 0.75rem; /* Espaciado interno */
-        text-align: left; /* Alineación del texto */
-        @apply text-sm sm:text-base;
+        padding: 6px; /* Reduce el padding para ahorrar espacio en pantallas pequeñas */
     }
+}
 
-    .financial-table th {
-        background-color: #f3f4f6; /* Fondo de encabezado */
-        color: #1f2937; /* Color del texto */
-        font-weight: 400; /* Peso de la fuente */
-    }
 
-    .financial-table td {
-        background-color: #ffffff; /* Fondo blanco */
-        color: #191a1b; /* Color del texto */
-    }
-
-    .financial-table td.textCenter {
-        text-align: center; /* Centrar el texto */
-    }
-    
-    .financial-table .total-row td {
-        font-weight: 700; /* Peso de la fuente para la fila total */
-        background-color: #f9fafb; /* Fondo gris claro */
-    }
-
-    .financial-table th.descrip {
-        color: #ec4899; /* Color rosa para el texto */
-        font-weight: bold; /* Negrilla */
-    }
-
-    .divs texth2{
-        color: #ec4899; /* Color rosa para el texto */
-        font-weight: bold; /* Negrilla */
-    }
-
-    .white-text {
-        color: white;
-    }
 /*Fin Estilos Tablas*/
 
 /* Modales*/

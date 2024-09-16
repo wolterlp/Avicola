@@ -33,22 +33,17 @@ class EggProductionController extends Controller
         // Agregar el ID del usuario logueado
         $validatedData['user_id'] = Auth::id();
 
- /*   
-        // Ver la consulta SQL que se va a ejecutar
-        DB::enableQueryLog(); // Activar el registro de consultas
-        DB::table('egg_productions')
-            ->insert($validatedData);
-
-        // Mostrar la consulta SQL generada y detener la ejecución
-        dd(DB::getQueryLog());
-*/
-
-        EggProduction::create([
+        $production = EggProduction::create([
             'date' => $request->input('date'),
             'quantity' => $request->input('quantity'),
             'user_id' => $request->input('user_id'), // Usar el ID del usuario enviado en el formulario
             'egg_category_id' => $request->input('egg_category_id'),
         ]);
+
+        if (!$production) {
+            return redirect()->back()->with('error', 'Error al registrar la produción.');
+        }
+
 
         EggInventory::create([
             'egg_category_id' => $request->input('egg_category_id'),

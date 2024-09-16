@@ -24,11 +24,15 @@ function closeModal() {
 /* inicio menu*/
     document.addEventListener('DOMContentLoaded', function() {
         const menuTrigger = document.querySelector('.group');
-        menuTrigger.addEventListener('click', function(event) {
-            event.stopPropagation();
-            const dropdown = this.querySelector('.group-hover\\:block');
-            dropdown.classList.toggle('hidden');
-        });
+
+            // Solo agrega el evento si el elemento existe
+        if (menuTrigger) {
+            menuTrigger.addEventListener('click', function(event) {
+                event.stopPropagation();
+                const dropdown = this.querySelector('.group-hover\\:block');
+                dropdown.classList.toggle('hidden');
+            });
+        }
 
         // Cierra el dropdown al hacer clic fuera de él
         document.addEventListener('click', function() {
@@ -88,6 +92,28 @@ function closeModal() {
             var selectedType = this.value;
             updateChartType(selectedType); // Actualizar el gráfico con el nuevo tipo
         });
+    }
+
+
+    function calculoPanal() {
+        const quantityInput = document.getElementById('quantity');
+        const panalInput = document.getElementById('panal');
+        
+        if (quantityInput && panalInput) {
+            const quantity = parseFloat(quantityInput.value);
+            const huevosPorPanal = 30; // Define el número de huevos por panal
+    
+            if (!isNaN(quantity)) {
+                // Calcular número de panales y huevos
+                const totalPanales = Math.floor(quantity / huevosPorPanal);
+                const huevosRestantes = (quantity % huevosPorPanal).toFixed(); // Fracción de huevos restantes
+    
+                // Mostrar resultado
+                panalInput.value = `${totalPanales} panales y ${huevosRestantes} huevos`;
+            } else {
+                panalInput.value = ''; // Limpiar si la cantidad no es un número válido
+            }
+        }
     }
 
 //reporte sales 
@@ -452,7 +478,7 @@ function createReportExpensesCharts() {
 document.addEventListener('DOMContentLoaded', () => {
 
     const currentURL = window.location.pathname;
-
+    console.log(currentURL);
     if (currentURL === "/report/report_production") {
         creatReportProductionCharts();
     } else if(currentURL === "/report/report_sales"){
@@ -461,7 +487,22 @@ document.addEventListener('DOMContentLoaded', () => {
         createAndUpdateChart();
     }else if(currentURL === "/report/report_expenses"){
         createReportExpensesCharts();
-    }
+    } 
+
+ 
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const currentURL = window.location.pathname;
+    const patron = /^\/sales\/\d+\/edit$/;
+    
+    const quantityInput = document.getElementById('quantity');
+    
+    // Detectar cambios en el campo de cantidad
+    if(currentURL === "/sales/create" || currentURL === "/eggProduction/create" || patron.test(currentURL) ){
+        quantityInput.addEventListener('input', calculoPanal);
+    }  
+    
 });
 
 /*fin graficos*/

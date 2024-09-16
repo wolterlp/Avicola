@@ -1,7 +1,7 @@
 <!-- resources/views/modal-show.blade.php -->
 <div x-data="{ open: false }">
     <!-- Button to open the modal -->
-    <button @click="open = true">Ver Detalles de la Venta</button>
+    <button @click="open = true">Ver Detalles</button>
 
     <!-- Modal -->
     <div x-show="open" @click.away="open = false" class="modal">

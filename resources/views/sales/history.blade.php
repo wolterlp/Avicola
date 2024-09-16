@@ -63,6 +63,7 @@
                                                     <!-- Include the modal content -->
                                                     @include('sales/modal-show')
                                                 </div>
+                                                <a href="{{route('sales.editSale', $sale->id)}}"> {{ __('Edit Sale')}} </a>
                                             </td>
                                         </tr>
                                     @endforeach

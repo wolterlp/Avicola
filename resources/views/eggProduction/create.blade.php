@@ -37,8 +37,14 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="flex flex-col mb-4">
+                            <label for="panal" class="text-pink-500 font-semibold">{{ __('Panales') }}</label>
+                            <input type="text" step="0.01" id="panal" name="panal" class="form-input" readonly>
+                        </div>
+
                         <!-- Campo oculto para enviar el ID del usuario -->
                         <input type="hidden" name="user_id" value="{{ Auth::id() }}">
+
                         <div class="flex justify-center">
                             <button type="submit" class="form-button">
                                     {{ __('Registrar Producción') }}

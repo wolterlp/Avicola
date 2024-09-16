@@ -19,7 +19,7 @@
         <div class="max-w-7x1 mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <!-- Sección del formulario de reportes -->
-                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
+                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center  gap-4">
                     <div class="form-container w-full ">
                         <form method="GET" action="{{ route('report.reportProduction') }}" class="form-wrapper">
                             @csrf
@@ -46,7 +46,7 @@
                 <!-- Reporte de Producción -->
                 
                 @if (isset($fec_ini) && isset($fec_fin))
-                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center  gap-4">
                         <!-- Producción Diaria -->
                         <div class="form-container w-full sm:w-1/2">
                             <h3 class="font-semibold text-lg text-pink-600">{{ __('Producción Diaria') }}</h3>
@@ -107,7 +107,7 @@
                         </div>
                     </div>
                     <!-- Producción Anual -->
-                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center  gap-4">
                         <div class="form-container w-full sm:w-1/2">
                             <h3 class="font-semibold text-lg text-pink-600">{{ __('Producción Anual') }}</h3>
                             <table class="financial-table">

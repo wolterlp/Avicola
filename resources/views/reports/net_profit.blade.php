@@ -24,7 +24,7 @@
         <div class="max-w-7x1 mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <!-- Flex container -->
-                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center items-center gap-4">
+                <div class="p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-center gap-4">
                     <!-- Primer div form-container -->
                     <div class="form-container  w-full sm:w-1/2">
                         <form method="GET" action="{{ route('report.netProfit') }}" class="form-wrapper">
